@@ -177,7 +177,7 @@ export default function IndustrySelector() {
 
         .industry-tab:hover {
           color: var(--color-text-primary);
-          background: rgba(255, 255, 255, 0.03);
+          background: var(--color-bg-glass-hover);
         }
 
         .industry-tab.active {
@@ -227,7 +227,7 @@ export default function IndustrySelector() {
         }
 
         .kpi-card {
-          background: rgba(255, 255, 255, 0.03);
+          background: var(--color-bg-glass);
           border: 1px solid var(--color-border-subtle);
           padding: 1.5rem;
           border-radius: var(--border-radius-sm);

@@ -116,8 +116,8 @@ export default function HeroSection() {
         }
 
         .btn-outline:hover {
-          background: rgba(255, 255, 255, 0.05);
-          border-color: rgba(255, 255, 255, 0.2);
+          background: var(--color-bg-surface-elevated);
+          border-color: var(--color-border-focus);
         }
       `}</style>
     </section>

@@ -1,15 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import logoImage from '../../assets/images/logo.png';
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   return (
-    <header className="app-header glass-panel animate-fade-in">
+    <header className={`app-header ${scrolled ? 'scrolled' : ''} animate-fade-in`}>
       <div className="header-content">
         <Link to="/" className="brand">
           {/* Main Logo Image */}
@@ -48,24 +57,42 @@ export default function Header() {
         .app-header {
           position: fixed;
           top: 0;
-          left: 0;
-          right: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 100%;
           height: 80px;
           z-index: 1000;
-          border-radius: 0;
-          border-top: none;
-          border-left: none;
-          border-right: none;
+          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
           border-bottom: 1px solid var(--color-border-subtle);
+          background: var(--color-bg-glass);
+          backdrop-filter: blur(10px);
+        }
+
+        .app-header.scrolled {
+          top: 20px;
+          width: 90%;
+          max-width: 1400px;
+          border-radius: 100px;
+          background: var(--color-bg-glass-hover);
+          backdrop-filter: blur(16px);
+          border: 1px solid var(--color-border-subtle);
+          box-shadow: var(--shadow-glass);
+          height: 70px;
         }
 
         .header-content {
-          max-width: 1200px;
+          width: 100%;
+          max-width: 100%; /* allows extreme corners */
           margin: 0 auto;
           height: 100%;
           display: flex;
           align-items: center;
           justify-content: space-between;
+          padding: 0 2rem; /* corners */
+          transition: padding 0.4s ease;
+        }
+
+        .app-header.scrolled .header-content {
           padding: 0 2rem;
         }
 
@@ -76,10 +103,15 @@ export default function Header() {
         }
 
         .brand-logo {
-          height: 40px; /* Adjust based on your logo's aspect ratio */
+          height: 40px; 
           width: auto;
           max-width: 200px;
           object-fit: contain;
+          transition: height 0.4s ease;
+        }
+
+        .app-header.scrolled .brand-logo {
+          height: 32px;
         }
 
         /* Desktop Nav Styles */
@@ -93,6 +125,7 @@ export default function Header() {
           color: var(--color-text-secondary);
           font-weight: 500;
           font-size: 0.95rem;
+          transition: color 0.2s ease;
         }
 
         .nav-link:hover {
@@ -154,12 +187,17 @@ export default function Header() {
             display: block;
           }
 
+          .app-header.scrolled {
+            width: 95%;
+            top: 10px;
+          }
+
           .header-content {
-            padding: 0 1rem;
+            padding: 0 1.5rem;
           }
 
           .brand-logo {
-            max-width: 150px; /* slightly smaller on mobile */
+            max-width: 150px; 
           }
 
           .mobile-nav {
@@ -172,6 +210,11 @@ export default function Header() {
             padding: 1.5rem;
             border-radius: 0 0 16px 16px;
             border-top: none;
+          }
+
+          .app-header.scrolled .mobile-nav {
+            top: 70px;
+            border-radius: 16px;
           }
 
           .mobile-nav-link {

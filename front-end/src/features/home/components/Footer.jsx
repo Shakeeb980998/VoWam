@@ -36,7 +36,7 @@ export default function Footer() {
 
       <style>{`
         .vowam-footer {
-          background: #02050a; /* Extra dark for footer */
+          background: var(--color-bg-surface); 
           padding: 6rem 2rem 2rem;
           border-top: 1px solid var(--color-border-subtle);
         }

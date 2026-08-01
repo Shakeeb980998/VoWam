@@ -32,9 +32,9 @@ export default function SecurityStrip() {
       <style>{`
         .security-section {
           padding: 4rem 2rem;
-          background: var(--color-accent-navy);
-          border-top: 1px solid rgba(255, 255, 255, 0.05);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+          background: var(--color-bg-surface-elevated);
+          border-top: 1px solid var(--color-border-subtle);
+          border-bottom: 1px solid var(--color-border-subtle);
         }
 
         .security-container {
