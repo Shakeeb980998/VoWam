@@ -1,0 +1,38 @@
+/* variables.css */
+:root {
+  /* Navy & Gold Theme */
+  --color-bg-base: #030712;
+  --color-bg-surface: #0f172a;
+  --color-bg-surface-elevated: #1e293b;
+  --color-bg-glass: rgba(15, 23, 42, 0.6);
+  --color-bg-glass-hover: rgba(30, 41, 59, 0.8);
+  
+  --color-accent-gold: #d4af37;
+  --color-accent-gold-light: #f7e089;
+  --color-accent-gold-dark: #aa8924;
+  --color-accent-navy: #001f54;
+  --color-accent-gold-glow: rgba(212, 175, 55, 0.25);
+
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+
+  --color-border-subtle: rgba(255, 255, 255, 0.08);
+  --color-border-focus: rgba(212, 175, 55, 0.4);
+
+  /* Typography */
+  --font-family-base: 'Inter', -apple-system, sans-serif;
+  --font-family-heading: 'Outfit', var(--font-family-base);
+
+  /* Shadows & Effects */
+  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  --backdrop-blur: blur(16px);
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 24px;
+  --border-radius-pill: 9999px;
+
+  /* Transitions */
+  --transition-fast: 0.15s ease-out;
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}

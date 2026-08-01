@@ -1,0 +1,199 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
+import logoImage from '../../assets/images/logo.png';
+
+export default function Header() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+
+  return (
+    <header className="app-header glass-panel animate-fade-in">
+      <div className="header-content">
+        <Link to="/" className="brand">
+          {/* Main Logo Image */}
+          <img src={logoImage} alt="VoWam Logo" className="brand-logo" />
+        </Link>
+
+        {/* Desktop Navigation */}
+        <nav className="header-nav desktop-nav">
+          <Link to="#features" className="nav-link">Platform</Link>
+          <Link to="#solutions" className="nav-link">Solutions</Link>
+          <div className="nav-actions">
+            <Link to="/login" className="btn btn-text">Sign In</Link>
+            <Link to="/register" className="btn btn-primary">Get Started</Link>
+          </div>
+        </nav>
+
+        {/* Mobile Menu Toggle Button */}
+        <button className="mobile-menu-btn" onClick={toggleMenu} aria-label="Toggle menu">
+          {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+        </button>
+      </div>
+
+      {/* Mobile Navigation Dropdown */}
+      {isMobileMenuOpen && (
+        <div className="mobile-nav glass-panel">
+          <Link to="#features" className="mobile-nav-link" onClick={toggleMenu}>Platform</Link>
+          <Link to="#solutions" className="mobile-nav-link" onClick={toggleMenu}>Solutions</Link>
+          <div className="mobile-nav-actions">
+            <Link to="/login" className="btn btn-text mobile-btn" onClick={toggleMenu}>Sign In</Link>
+            <Link to="/register" className="btn btn-primary mobile-btn" onClick={toggleMenu}>Get Started</Link>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        .app-header {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 80px;
+          z-index: 1000;
+          border-radius: 0;
+          border-top: none;
+          border-left: none;
+          border-right: none;
+          border-bottom: 1px solid var(--color-border-subtle);
+        }
+
+        .header-content {
+          max-width: 1200px;
+          margin: 0 auto;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 2rem;
+        }
+
+        .brand {
+          display: flex;
+          align-items: center;
+          height: 100%;
+        }
+
+        .brand-logo {
+          height: 40px; /* Adjust based on your logo's aspect ratio */
+          width: auto;
+          max-width: 200px;
+          object-fit: contain;
+        }
+
+        /* Desktop Nav Styles */
+        .desktop-nav {
+          display: flex;
+          align-items: center;
+          gap: 2rem;
+        }
+
+        .nav-link {
+          color: var(--color-text-secondary);
+          font-weight: 500;
+          font-size: 0.95rem;
+        }
+
+        .nav-link:hover {
+          color: var(--color-text-primary);
+        }
+
+        .nav-actions {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-left: 1rem;
+        }
+
+        .btn {
+          padding: 0.6rem 1.25rem;
+          border-radius: var(--border-radius-pill);
+          font-weight: 600;
+          font-size: 0.95rem;
+          transition: all var(--transition-fast);
+          text-align: center;
+        }
+
+        .btn-text {
+          color: var(--color-text-primary);
+        }
+
+        .btn-text:hover {
+          color: var(--color-accent-gold);
+        }
+
+        .btn-primary {
+          background: var(--color-accent-gold);
+          color: #000;
+          box-shadow: 0 4px 15px var(--color-accent-gold-glow);
+        }
+
+        .btn-primary:hover {
+          transform: translateY(-2px);
+          background: var(--color-accent-gold-light);
+          box-shadow: 0 6px 20px rgba(247, 224, 137, 0.4);
+        }
+
+        /* Mobile Nav Styles */
+        .mobile-menu-btn {
+          display: none;
+          color: var(--color-text-primary);
+        }
+
+        .mobile-nav {
+          display: none;
+        }
+
+        @media (max-width: 768px) {
+          .desktop-nav {
+            display: none;
+          }
+
+          .mobile-menu-btn {
+            display: block;
+          }
+
+          .header-content {
+            padding: 0 1rem;
+          }
+
+          .brand-logo {
+            max-width: 150px; /* slightly smaller on mobile */
+          }
+
+          .mobile-nav {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 80px;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            border-radius: 0 0 16px 16px;
+            border-top: none;
+          }
+
+          .mobile-nav-link {
+            padding: 1rem 0;
+            color: var(--color-text-primary);
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-bottom: 1px solid var(--color-border-subtle);
+          }
+
+          .mobile-nav-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+          }
+          
+          .mobile-btn {
+            width: 100%;
+          }
+        }
+      `}</style>
+    </header>
+  );
+}
