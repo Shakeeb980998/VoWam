@@ -4,6 +4,7 @@ import DashboardLayout from '../components/layout/DashboardLayout';
 import Home from '../features/home/pages/Home';
 import Login from '../features/auth/pages/Login';
 import DashboardHome from '../features/dashboard/pages/DashboardHome';
+import Roles from '../features/settings/pages/Roles';
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <DashboardHome />,
+      },
+      {
+        path: 'roles',
+        element: <Roles />,
       }
     ]
   },

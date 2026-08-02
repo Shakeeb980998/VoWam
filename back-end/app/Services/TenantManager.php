@@ -17,7 +17,7 @@ class TenantManager
         $this->currentTenant = $tenant;
 
         // Set the database name for the tenant connection
-        config(['database.connections.tenant.database' => $tenant->database_name]);
+        config(['database.connections.tenant.database' => $tenant->tenancy_db_name]);
 
         // Purge the tenant connection to clear internal cache and apply new config
         DB::purge('tenant');

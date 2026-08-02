@@ -7,12 +7,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Role extends Model
 {
-    // Roles reside in the central database
-    protected $connection = 'mysql';
-
     protected $fillable = [
-        'name',
-        'slug',
+        'company_id',
+        'code',
+        'description',
     ];
 
     /**

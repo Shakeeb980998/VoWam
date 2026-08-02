@@ -3,6 +3,7 @@
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NavigationController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,12 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Dynamic Navigation Endpoint
     Route::get('/navigation', [NavigationController::class, 'index']);
+});
+
+// Tenant-Aware Authenticated Routes
+Route::middleware(['auth:sanctum', 'tenant'])->group(function () {
+    // Roles Management
+    Route::apiResource('roles', RoleController::class);
 });
 
 Route::apiResource('companies', CompanyController::class);
