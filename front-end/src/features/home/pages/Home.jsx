@@ -1,29 +1,45 @@
 import React from 'react';
 import HeroSection from '../components/HeroSection';
+import DashboardShowcase from '../components/DashboardShowcase';
 import TrustBar from '../components/TrustBar';
-import ProblemSolution from '../components/ProblemSolution';
-import IndustrySelector from '../components/IndustrySelector';
-import HowItWorks from '../components/HowItWorks';
-import AILayerShowcase from '../components/AILayerShowcase';
 import FeatureGrid from '../components/FeatureGrid';
-import SecurityStrip from '../components/SecurityStrip';
-import SocialProof from '../components/SocialProof';
+import IndustrySelector from '../components/IndustrySelector';
+import WhyVowam from '../components/WhyVowam';
+import ScreenshotsGallery from '../components/ScreenshotsGallery';
 import PricingTeaser from '../components/PricingTeaser';
+import FaqSection from '../components/FaqSection';
 import FinalCTA from '../components/FinalCTA';
 
 export default function Home() {
   return (
-    <div className="home-page-container">
+    <div className="home-page fade-in">
       <HeroSection />
+      
+      {/* 2. Trusted by businesses (future) */}
       <TrustBar />
-      <ProblemSolution />
-      <IndustrySelector />
-      <HowItWorks />
-      <AILayerShowcase />
+
+      {/* 3. Dashboard showcase */}
+      <DashboardShowcase />
+      
+      {/* 4. Core features */}
       <FeatureGrid />
-      <SecurityStrip />
-      <SocialProof />
+      
+      {/* 5. Industry solutions */}
+      <IndustrySelector />
+      
+      {/* 6. Why Vowam */}
+      <WhyVowam />
+      
+      {/* 7. Screenshots */}
+      <ScreenshotsGallery />
+      
+      {/* 8. Pricing (later) */}
       <PricingTeaser />
+
+      {/* 9. FAQ */}
+      <FaqSection />
+      
+      {/* 10. Contact / Demo */}
       <FinalCTA />
     </div>
   );

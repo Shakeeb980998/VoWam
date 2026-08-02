@@ -1,45 +1,56 @@
 import { motion } from 'framer-motion';
-import { FileText, Calculator, PieChart, CheckSquare, Globe, ScrollText } from 'lucide-react';
+import { BookOpen, CreditCard, Banknote, Package, Users, Receipt, LineChart, Building2, BrainCircuit } from 'lucide-react';
 
 const features = [
-  { icon: FileText, title: 'Financial Reporting', desc: 'Live P&L, Balance Sheet, and Cash Flow querying directly from posted journals.' },
-  { icon: Calculator, title: 'VAT & Corporate Tax', desc: 'FTA-compliant tax computation with completely transparent, reviewable adjustments.' },
-  { icon: PieChart, title: 'Budgeting & Forecasting', desc: 'Compare actuals vs. budgets in real-time without exporting to external sheets.' },
-  { icon: CheckSquare, title: 'Approval Workflows', desc: 'OCR-assisted invoice capture with multi-tier approval routing before posting.' },
-  { icon: Globe, title: 'Multi-Branch & Currency', desc: 'Consolidate multiple branches and currencies natively within your single ledger.' },
-  { icon: ScrollText, title: 'Immutable Audit Trail', desc: 'Entries are never deleted. Every number drills down to its exact source transaction.' }
+  { icon: BookOpen, title: 'General Ledger', desc: 'The indisputable core of your financial data, balancing perfectly every time.' },
+  { icon: CreditCard, title: 'Accounts Payable', desc: 'Automate vendor bills, track liabilities, and streamline payment runs.' },
+  { icon: Banknote, title: 'Accounts Receivable', desc: 'Generate smart invoices, track customer payments, and reduce DSO.' },
+  { icon: Package, title: 'Inventory', desc: 'Real-time stock valuation, multi-warehouse tracking, and COGS automation.' },
+  { icon: Users, title: 'Payroll', desc: 'Integrated payroll runs that automatically post to your ledger and employee accounts.' },
+  { icon: Receipt, title: 'VAT & Tax', desc: 'Automated tax calculations, return generation, and compliance tracking.' },
+  { icon: LineChart, title: 'Financial Reports', desc: 'Live P&L, Balance Sheet, and custom multidimensional reporting engines.' },
+  { icon: Building2, title: 'Multi-company', desc: 'Manage unlimited entities and consolidate financials in a single click.' },
+  { icon: BrainCircuit, title: 'AI Insights (Future)', desc: 'Predictive cash flow, anomaly detection, and automated smart reconciliations.' },
 ];
 
 export default function FeatureGrid() {
   return (
-    <section className="features-section">
-      <div className="features-container">
-        <motion.div 
-          className="features-header"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-        >
-          <h2>The power of a heavy-weight ERP.</h2>
-          <p>Without the heavy-weight implementation timeline.</p>
-        </motion.div>
+    <section className="features-section" id="features">
+      <div className="section-container">
+        <div className="section-header text-center">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            Core Enterprise Features
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            Everything you need to run your entire business from a single source of truth.
+          </motion.p>
+        </div>
 
         <div className="features-grid">
-          {features.map((feat, idx) => (
+          {features.map((feature, idx) => (
             <motion.div 
               key={idx}
-              className="feat-card glass-panel"
+              className="feature-card glass-panel"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
-              transition={{ delay: idx * 0.1 }}
-              whileHover={{ y: -10, borderColor: 'var(--color-border-focus)' }}
+              transition={{ duration: 0.5, delay: idx * 0.05 }}
             >
-              <div className="feat-icon text-gradient">
-                <feat.icon size={32} />
+              <div className="feature-icon-wrapper">
+                <feature.icon size={28} className="feature-icon" />
               </div>
-              <h3>{feat.title}</h3>
-              <p>{feat.desc}</p>
+              <h3 className="feature-title">{feature.title}</h3>
+              <p className="feature-desc">{feature.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -49,25 +60,26 @@ export default function FeatureGrid() {
         .features-section {
           padding: 8rem 2rem;
           background: var(--color-bg-base);
-          position: relative;
         }
 
-        .features-container {
-          max-width: 1200px;
+        .section-container {
+          width: 100%;
+          padding: 0 4vw;
           margin: 0 auto;
         }
 
-        .features-header {
-          text-align: center;
+        .section-header {
           margin-bottom: 5rem;
+          max-width: 700px;
+          margin-inline: auto;
         }
-
-        .features-header h2 {
-          font-size: clamp(2rem, 3.5vw, 2.5rem);
+        
+        .section-header h2 {
+          font-size: 2.5rem;
           margin-bottom: 1rem;
         }
 
-        .features-header p {
+        .section-header p {
           font-size: 1.15rem;
           color: var(--color-text-secondary);
         }
@@ -78,35 +90,53 @@ export default function FeatureGrid() {
           gap: 2rem;
         }
 
-        .feat-card {
+        .feature-card {
           padding: 2.5rem;
           display: flex;
           flex-direction: column;
           align-items: flex-start;
-          transition: transform 0.3s ease, border-color 0.3s ease;
-          background: var(--color-bg-surface);
+          transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
         }
 
-        .feat-icon {
-          width: 56px;
-          height: 56px;
-          background: rgba(212, 175, 55, 0.1);
-          border-radius: 12px;
+        .feature-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+          background: var(--color-bg-surface-elevated);
+        }
+
+        .feature-icon-wrapper {
+          width: 60px;
+          height: 60px;
+          border-radius: 14px;
+          background: var(--color-bg-surface);
+          border: 1px solid var(--color-border-subtle);
           display: flex;
           align-items: center;
           justify-content: center;
           margin-bottom: 1.5rem;
+          transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon-wrapper {
+          background: var(--color-accent-gold-glow);
+          border-color: var(--color-accent-gold);
+        }
+
+        .feature-icon {
           color: var(--color-accent-gold);
         }
 
-        .feat-card h3 {
-          font-size: 1.3rem;
+        .feature-title {
+          font-size: 1.25rem;
           margin-bottom: 1rem;
+          font-weight: 600;
+          color: var(--color-text-primary);
         }
 
-        .feat-card p {
+        .feature-desc {
           color: var(--color-text-secondary);
           line-height: 1.6;
+          font-size: 0.95rem;
         }
       `}</style>
     </section>

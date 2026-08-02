@@ -10,8 +10,8 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          One Core Ledger.<br />
-          <span className="text-gradient">Reshaped for Every Business.</span>
+          One Platform.<br />
+          <span className="text-gradient">Complete Business Control.</span>
         </motion.h1>
 
         <motion.p 
@@ -20,7 +20,7 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
         >
-          Go from signup to your first posted, balanced transaction in under 15 minutes. NetSuite-grade accounting correctness with QuickBooks-grade time-to-value. Zero consultants required.
+          Modern cloud accounting, payroll, inventory, VAT, and financial intelligence for growing businesses.
         </motion.p>
 
         <motion.div 
@@ -29,8 +29,8 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
         >
-          <button className="btn btn-primary btn-lg">Start Free</button>
-          <button className="btn btn-outline btn-lg">Watch how it works</button>
+          <button className="btn btn-primary btn-lg">Get Started</button>
+          <button className="btn btn-outline btn-lg">Book a Demo</button>
         </motion.div>
       </div>
 

@@ -37,7 +37,8 @@ export default function TrustBar() {
         }
 
         .trust-bar-container {
-          max-width: 1200px;
+          width: 100%;
+          padding: 0 4vw;
           margin: 0 auto;
           text-align: center;
         }

@@ -3,97 +3,167 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Building2, 
   ShoppingCart, 
-  UtensilsCrossed, 
-  Globe2, 
-  Sparkles, 
-  Rocket, 
-  Factory 
+  Store,
+  Factory,
+  Wrench,
+  Stethoscope,
+  Truck
 } from 'lucide-react';
 
 const industries = [
-  { id: 'construction', name: 'Construction', icon: Building2, kpis: ['Job Costing', 'BOQ', 'Progress Billing', 'WIP'] },
-  { id: 'retail', name: 'Grocery / Retail', icon: ShoppingCart, kpis: ['POS Integration', 'Inventory', 'Multi-branch'] },
-  { id: 'restaurant', name: 'Restaurant', icon: UtensilsCrossed, kpis: ['POS Sync', 'Inventory', 'Recipe Costing'] },
-  { id: 'trading', name: 'Trading', icon: Globe2, kpis: ['Multi-currency', 'Purchase Cycles', 'Sales Cycles'] },
-  { id: 'services', name: 'Cleaning / Services', icon: Sparkles, kpis: ['Service Contracts', 'Recurring Billing'] },
-  { id: 'startups', name: 'Startups', icon: Rocket, kpis: ['Lean Accounting', 'Investor Reporting', 'Burn Rate'] },
-  { id: 'manufacturing', name: 'Manufacturing+', icon: Factory, kpis: ['Built to grow into your next industry without a re-platform.'] },
+  {
+    id: 'construction',
+    name: 'Construction',
+    icon: Building2,
+    headline: 'Project accounting built for builders.',
+    desc: 'Track costs by project, manage subcontractor retentions, and handle progress billing with ease.',
+    kpis: [
+      { label: 'Job Costing', value: 'Live' },
+      { label: 'Retainage', value: 'Automated' },
+      { label: 'WIP Reports', value: '1-Click' }
+    ]
+  },
+  {
+    id: 'trading',
+    name: 'Trading',
+    icon: ShoppingCart,
+    headline: 'High-volume trading, zero bottlenecks.',
+    desc: 'Manage multi-currency transactions, landed costs, and complex supply chains seamlessly.',
+    kpis: [
+      { label: 'Multi-Currency', value: '160+' },
+      { label: 'Landed Costs', value: 'Auto-alloc' },
+      { label: 'B2B Portal', value: 'Included' }
+    ]
+  },
+  {
+    id: 'retail',
+    name: 'Retail',
+    icon: Store,
+    headline: 'Omnichannel retail at your fingertips.',
+    desc: 'Sync POS systems, manage multi-location inventory, and track branch-wise profitability.',
+    kpis: [
+      { label: 'POS Sync', value: 'Real-time' },
+      { label: 'Locations', value: 'Unlimited' },
+      { label: 'Stock Alerts', value: 'Smart' }
+    ]
+  },
+  {
+    id: 'manufacturing',
+    name: 'Manufacturing',
+    icon: Factory,
+    headline: 'From raw materials to finished goods.',
+    desc: 'Complex BOMs, routing, production orders, and capacity planning natively integrated.',
+    kpis: [
+      { label: 'BOM Levels', value: 'Infinite' },
+      { label: 'Routing', value: 'Dynamic' },
+      { label: 'Scrap Tracking', value: 'Precise' }
+    ]
+  },
+  {
+    id: 'services',
+    name: 'Services',
+    icon: Wrench,
+    headline: 'Time, expenses, and recurring billing.',
+    desc: 'Automate subscription billing, track billable hours, and forecast resource utilization.',
+    kpis: [
+      { label: 'Recurring Invoices', value: 'Auto' },
+      { label: 'Timesheets', value: 'Integrated' },
+      { label: 'Utilization', value: 'Dashboard' }
+    ]
+  },
+  {
+    id: 'healthcare',
+    name: 'Healthcare',
+    icon: Stethoscope,
+    headline: 'Secure, compliant financial care.',
+    desc: 'HIPAA-ready infrastructure, department-wise budgets, and streamlined procurement.',
+    kpis: [
+      { label: 'Security', value: 'Bank-grade' },
+      { label: 'Approvals', value: 'Multi-tier' },
+      { label: 'Audits', value: 'Traceable' }
+    ]
+  },
+  {
+    id: 'logistics',
+    name: 'Logistics',
+    icon: Truck,
+    headline: 'Keep your fleet and finances moving.',
+    desc: 'Fleet maintenance accounting, route profitability, and integrated dispatch invoicing.',
+    kpis: [
+      { label: 'Asset Depreciation', value: 'Auto' },
+      { label: 'Fuel Costs', value: 'Tracked' },
+      { label: 'Waybills', value: 'Generated' }
+    ]
+  }
 ];
 
 export default function IndustrySelector() {
-  const [activeTab, setActiveTab] = useState(industries[0]);
+  const [activeTab, setActiveTab] = useState(industries[0].id);
+
+  const activeData = industries.find(ind => ind.id === activeTab);
 
   return (
     <section className="industry-section">
-      <div className="industry-container">
-        <motion.div 
-          className="industry-header"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2>One engine, many businesses.</h2>
-          <p>Pick your industry, and your Chart of Accounts, dashboards, and workflows are ready. No consultants.</p>
-        </motion.div>
+      <div className="section-container">
+        <div className="section-header text-center">
+          <h2>Engineered for your industry</h2>
+          <p>VoWam adapts to your specific business model out of the box.</p>
+        </div>
 
         <div className="industry-layout">
           {/* Tabs Sidebar */}
           <div className="industry-tabs">
-            {industries.map((industry) => (
+            {industries.map((ind) => (
               <button 
-                key={industry.id}
-                className={`industry-tab ${activeTab.id === industry.id ? 'active' : ''}`}
-                onClick={() => setActiveTab(industry)}
+                key={ind.id}
+                className={`industry-tab ${activeTab === ind.id ? 'active' : ''}`}
+                onClick={() => setActiveTab(ind.id)}
               >
-                <industry.icon size={20} className="tab-icon" />
-                {industry.name}
-                {activeTab.id === industry.id && (
-                  <motion.div className="tab-indicator" layoutId="activeTabIndicator" />
+                <ind.icon size={20} className="tab-icon" />
+                <span>{ind.name}</span>
+                {activeTab === ind.id && (
+                  <motion.div 
+                    layoutId="activeTabIndicator" 
+                    className="tab-indicator"
+                    initial={false}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
                 )}
               </button>
             ))}
           </div>
 
-          {/* Dynamic Content Area */}
-          <div className="industry-content glass-panel">
+          {/* Content Area */}
+          <div className="industry-content-wrapper glass-panel">
             <AnimatePresence mode="wait">
               <motion.div
-                key={activeTab.id}
+                key={activeTab}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3 }}
-                className="industry-panel"
+                className="industry-content"
               >
                 <div className="panel-header">
-                  <activeTab.icon size={48} className="panel-icon text-gradient" />
-                  <h3>{activeTab.name} Out-of-the-Box</h3>
+                  <activeData.icon size={48} className="panel-icon" />
+                  <div>
+                    <h3>{activeData.headline}</h3>
+                    <p className="panel-desc">{activeData.desc}</p>
+                  </div>
                 </div>
-                
+
                 <div className="kpi-grid">
-                  {activeTab.kpis.map((kpi, idx) => (
+                  {activeData.kpis.map((kpi, idx) => (
                     <div key={idx} className="kpi-card">
-                      <div className="kpi-dot"></div>
-                      <span className="kpi-text">{kpi}</span>
+                      <span className="kpi-label">{kpi.label}</span>
+                      <span className="kpi-value">{kpi.value}</span>
                     </div>
                   ))}
                 </div>
 
-                <div className="dashboard-mockup">
-                  {/* Abstract dashboard lines */}
-                  <div className="mockup-header">
-                    <div className="mockup-skeleton w-32"></div>
-                    <div className="mockup-skeleton w-16"></div>
-                  </div>
-                  <div className="mockup-chart">
-                    <div className="chart-bar h-60"></div>
-                    <div className="chart-bar h-80"></div>
-                    <div className="chart-bar h-40"></div>
-                    <div className="chart-bar h-90"></div>
-                    <div className="chart-bar h-70"></div>
-                  </div>
-                </div>
+                <button className="btn btn-primary mt-auto self-start">
+                  Explore {activeData.name} Solutions
+                </button>
               </motion.div>
             </AnimatePresence>
           </div>
@@ -103,56 +173,35 @@ export default function IndustrySelector() {
       <style>{`
         .industry-section {
           padding: 8rem 2rem;
-          background: var(--color-bg-surface);
+          background: var(--color-bg-base);
+          position: relative;
         }
 
-        .industry-container {
-          max-width: 1200px;
+        .section-container {
+          width: 100%;
+          padding: 0 4vw;
           margin: 0 auto;
         }
 
-        .industry-header {
-          text-align: center;
+        .section-header {
           margin-bottom: 4rem;
         }
 
-        .industry-header h2 {
-          font-size: clamp(2rem, 4vw, 3rem);
+        .section-header h2 {
+          font-size: 2.5rem;
           margin-bottom: 1rem;
         }
 
-        .industry-header p {
+        .section-header p {
           font-size: 1.15rem;
           color: var(--color-text-secondary);
         }
 
         .industry-layout {
           display: grid;
-          grid-template-columns: 300px 1fr;
+          grid-template-columns: 280px 1fr;
           gap: 3rem;
-          align-items: flex-start;
-        }
-
-        @media (max-width: 900px) {
-          .industry-layout {
-            grid-template-columns: 1fr;
-          }
-          
-          .industry-tabs {
-            display: flex;
-            overflow-x: auto;
-            padding-bottom: 1rem;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-          }
-          
-          .industry-tabs::-webkit-scrollbar {
-            display: none;
-          }
-          
-          .industry-tab {
-            white-space: nowrap;
-          }
+          min-height: 500px;
         }
 
         .industry-tabs {
@@ -165,14 +214,14 @@ export default function IndustrySelector() {
           display: flex;
           align-items: center;
           gap: 1rem;
-          padding: 1.2rem;
-          border-radius: var(--border-radius-sm);
-          color: var(--color-text-secondary);
+          padding: 1rem 1.5rem;
+          font-size: 1.1rem;
           font-weight: 500;
-          font-size: 1rem;
-          text-align: left;
+          color: var(--color-text-secondary);
           position: relative;
-          transition: color var(--transition-fast);
+          text-align: left;
+          transition: color 0.2s ease;
+          border-radius: var(--border-radius-sm);
         }
 
         .industry-tab:hover {
@@ -197,31 +246,44 @@ export default function IndustrySelector() {
           z-index: -1;
         }
 
+        .industry-content-wrapper {
+          overflow: hidden;
+        }
+
         .industry-content {
-          padding: 3rem;
-          min-height: 500px;
+          padding: 4rem;
+          min-height: 100%;
           display: flex;
           flex-direction: column;
         }
 
         .panel-header {
           display: flex;
-          align-items: center;
-          gap: 1.5rem;
+          align-items: flex-start;
+          gap: 2rem;
           margin-bottom: 3rem;
         }
 
         .panel-icon {
           color: var(--color-accent-gold);
+          flex-shrink: 0;
         }
 
         .panel-header h3 {
           font-size: 2rem;
+          margin-bottom: 0.5rem;
+          color: var(--color-text-primary);
+        }
+
+        .panel-desc {
+          font-size: 1.1rem;
+          color: var(--color-text-secondary);
+          line-height: 1.6;
         }
 
         .kpi-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          grid-template-columns: repeat(3, 1fr);
           gap: 1.5rem;
           margin-bottom: 3rem;
         }
@@ -232,66 +294,53 @@ export default function IndustrySelector() {
           padding: 1.5rem;
           border-radius: var(--border-radius-sm);
           display: flex;
-          align-items: center;
-          gap: 1rem;
+          flex-direction: column;
+          gap: 0.5rem;
         }
 
-        .kpi-dot {
-          width: 8px;
-          height: 8px;
-          background: var(--color-accent-cyan);
-          border-radius: 50%;
+        .kpi-label {
+          font-size: 0.9rem;
+          color: var(--color-text-secondary);
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
         }
 
-        .kpi-text {
-          font-weight: 500;
+        .kpi-value {
+          font-size: 1.5rem;
+          font-weight: 700;
           color: var(--color-text-primary);
         }
 
-        /* Abstract Mockup */
-        .dashboard-mockup {
-          background: var(--color-bg-base);
-          border-radius: var(--border-radius-md);
-          border: 1px solid var(--color-border-subtle);
-          padding: 2rem;
-          margin-top: auto;
-        }
+        .mt-auto { margin-top: auto; }
+        .self-start { align-self: flex-start; }
 
-        .mockup-header {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 2rem;
+        @media (max-width: 900px) {
+          .industry-layout {
+            grid-template-columns: 1fr;
+          }
+          .industry-tabs {
+            flex-direction: row;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+          }
+          .industry-tab {
+            white-space: nowrap;
+          }
+          .tab-indicator {
+            border-left: none;
+            border-bottom: 3px solid var(--color-accent-gold);
+          }
+          .panel-header {
+            flex-direction: column;
+            gap: 1rem;
+          }
+          .kpi-grid {
+            grid-template-columns: 1fr;
+          }
+          .industry-content {
+            padding: 2rem;
+          }
         }
-
-        .mockup-skeleton {
-          height: 20px;
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 4px;
-        }
-        
-        .w-32 { width: 120px; }
-        .w-16 { width: 60px; }
-
-        .mockup-chart {
-          display: flex;
-          align-items: flex-end;
-          gap: 1rem;
-          height: 120px;
-        }
-
-        .chart-bar {
-          flex: 1;
-          background: linear-gradient(to top, var(--color-accent-navy), var(--color-accent-gold));
-          border-radius: 4px 4px 0 0;
-          opacity: 0.8;
-          transition: height 0.5s ease;
-        }
-
-        .h-60 { height: 60%; }
-        .h-80 { height: 80%; }
-        .h-40 { height: 40%; }
-        .h-90 { height: 90%; }
-        .h-70 { height: 70%; }
       `}</style>
     </section>
   );
