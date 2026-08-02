@@ -6,24 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('companies', function (Blueprint $table) {
+        Schema::create('industry_modules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tenant_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->string('name');
+            $table->string('industry_code')->index();
+            $table->string('module_code');
+            $table->string('label');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('companies');
+        Schema::dropIfExists('industry_modules');
     }
 };

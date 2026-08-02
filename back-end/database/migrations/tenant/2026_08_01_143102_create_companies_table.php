@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tenant_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('name');
+            $table->string('industry_code')->nullable();
+            $table->string('base_currency', 3)->default('USD');
+            $table->date('fiscal_year_start')->nullable();
             $table->timestamps();
         });
     }
