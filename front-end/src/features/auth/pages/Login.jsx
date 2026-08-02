@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logoImage from '../../../assets/images/logo.png';
+import { authService } from '../services/authService';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [focusedInput, setFocusedInput] = useState(null);
+  
+  // API Call States
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  
+  const navigate = useNavigate();
   
   // Rotating tagline for the presentation side
   const taglines = [
@@ -64,11 +71,51 @@ export default function Login() {
 
           <motion.form 
             className="auth-form" 
-            onSubmit={(e) => e.preventDefault()}
+            onSubmit={async (e) => {
+              e.preventDefault();
+              setError(null);
+              setIsLoading(true);
+              
+              try {
+                // Call the backend API using our authService (which uses VITE_API_BASE_URL)
+                const response = await authService.login(email, password);
+                
+                // Assuming the API returns a token
+                if (response.token) {
+                  authService.setToken(response.token);
+                }
+                
+                // Navigate to dashboard on success
+                navigate('/dashboard');
+              } catch (err) {
+                setError(err.message || "An unexpected error occurred. Please try again.");
+              } finally {
+                setIsLoading(false);
+              }
+            }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
           >
+            
+            <AnimatePresence>
+              {error && (
+                <motion.div 
+                  className="auth-error-message"
+                  initial={{ opacity: 0, height: 0, y: -10 }}
+                  animate={{ opacity: 1, height: 'auto', y: 0 }}
+                  exit={{ opacity: 0, height: 0, y: -10 }}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                  </svg>
+                  <span>{error}</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             <div className={`form-group-premium ${focusedInput === 'email' ? 'focused' : ''} ${email ? 'has-value' : ''}`}>
               <label>Email Address</label>
               <div className="input-wrapper">
@@ -110,15 +157,22 @@ export default function Login() {
 
             <motion.button 
               type="submit" 
-              className="btn-premium-login"
-              whileHover={{ scale: 1.02, boxShadow: "0 10px 25px -5px var(--color-accent-gold-glow)" }}
-              whileTap={{ scale: 0.98 }}
+              className={`btn-premium-login ${isLoading ? 'loading' : ''}`}
+              disabled={isLoading || !email || !password}
+              whileHover={!isLoading && email && password ? { scale: 1.02, boxShadow: "0 10px 25px -5px var(--color-accent-gold-glow)" } : {}}
+              whileTap={!isLoading && email && password ? { scale: 0.98 } : {}}
             >
-              Sign In
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{marginLeft: '8px'}}>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
+              {isLoading ? (
+                <div className="loader-spinner"></div>
+              ) : (
+                <>
+                  Sign In
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{marginLeft: '8px'}}>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </>
+              )}
             </motion.button>
           </motion.form>
 
@@ -344,6 +398,49 @@ export default function Login() {
           border-radius: var(--border-radius-md);
           cursor: pointer;
           box-shadow: 0 4px 14px rgba(0, 31, 84, 0.15);
+          transition: all 0.3s ease;
+        }
+
+        .btn-premium-login:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+        
+        .btn-premium-login.loading {
+          background: var(--color-text-muted);
+          box-shadow: none;
+        }
+
+        .loader-spinner {
+          width: 24px;
+          height: 24px;
+          border: 3px solid rgba(255,255,255,0.3);
+          border-radius: 50%;
+          border-top-color: #fff;
+          animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+
+        .auth-error-message {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.75rem;
+          padding: 1rem;
+          background: rgba(220, 38, 38, 0.1);
+          border-left: 4px solid #dc2626;
+          border-radius: var(--border-radius-sm);
+          color: #b91c1c;
+          font-size: 0.9rem;
+          font-weight: 500;
+          overflow: hidden;
+        }
+
+        .auth-error-message svg {
+          flex-shrink: 0;
+          margin-top: 0.1rem;
         }
 
         .auth-footer {
