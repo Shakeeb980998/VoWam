@@ -39,7 +39,9 @@ class AuthController extends Controller
                     'email' => $user->email,
                     'tenant_id' => $user->tenant_id,
                     'tenant_name' => $user->tenant ? $user->tenant->name : null,
-                ]
+                ],
+                'navigation' => config('navigation.navigation', []),
+                'permissions' => config('navigation.permissions', [])
             ]);
         }
 

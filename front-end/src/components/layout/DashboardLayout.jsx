@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { 
-  LayoutDashboard, 
-  Box, 
-  FileText, 
-  PieChart, 
-  Settings, 
-  Bell, 
-  Search,
   Menu,
   X,
   User,
   LogOut,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  Home,
+  Clock,
+  Calendar,
+  Clipboard,
+  Wallet,
+  Package,
+  CreditCard,
+  Briefcase,
+  DollarSign,
+  Box,
+  Settings,
+  Bell,
+  Search
 } from 'lucide-react';
 import { authService } from '../../features/auth/services/authService';
 import logoImage from '../../assets/images/logo.png';
@@ -21,6 +27,7 @@ import logoImage from '../../assets/images/logo.png';
 export default function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [expandedMenus, setExpandedMenus] = useState({});
+  const [navItems, setNavItems] = useState(authService.getNavigation());
   const [currentTime, setCurrentTime] = useState(new Date());
   const navigate = useNavigate();
 
@@ -40,6 +47,23 @@ export default function DashboardLayout() {
     return () => clearInterval(timer);
   }, []);
 
+  const getIcon = (iconName) => {
+    const icons = {
+      'home': <Home size={20} />,
+      'user': <User size={20} />,
+      'clock': <Clock size={20} />,
+      'calendar': <Calendar size={20} />,
+      'clipboard': <Clipboard size={20} />,
+      'pocket': <Wallet size={20} />,
+      'package': <Package size={20} />,
+      'credit-card': <CreditCard size={20} />,
+      'briefcase': <Briefcase size={20} />,
+      'dollar-sign': <DollarSign size={20} />,
+      'settings': <Settings size={20} />
+    };
+    return icons[iconName] || <Box size={20} />;
+  };
+
   const handleLogout = async () => {
     try {
       await fetch(import.meta.env.VITE_API_BASE_URL + '/logout', {
@@ -55,22 +79,6 @@ export default function DashboardLayout() {
     authService.logout();
     navigate('/login');
   };
-
-  const navItems = [
-    { name: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard size={20} />, exact: true },
-    { name: 'Inventory', path: '/dashboard/inventory', icon: <Box size={20} /> },
-    { name: 'Invoices', path: '/dashboard/invoices', icon: <FileText size={20} /> },
-    { name: 'Reports', path: '/dashboard/reports', icon: <PieChart size={20} /> },
-    { 
-      name: 'Settings', 
-      icon: <Settings size={20} />,
-      subItems: [
-        { name: 'User', path: '/dashboard/settings/users' },
-        { name: 'Role', path: '/dashboard/settings/roles' },
-        { name: 'Designation', path: '/dashboard/settings/designations' },
-      ]
-    },
-  ];
 
   const formattedDate = currentTime.toLocaleDateString('en-US', {
     weekday: 'long',
@@ -102,48 +110,57 @@ export default function DashboardLayout() {
 
         <nav className="sidebar-nav">
           <ul>
-            {navItems.map((item) => (
-              <li key={item.name} className="nav-item">
-                {item.subItems ? (
-                  <>
-                    <button 
-                      className={`nav-link sub-toggle ${expandedMenus[item.name] ? 'expanded' : ''}`}
-                      onClick={() => toggleSubMenu(item.name)}
+            {navItems.map((item) => {
+              if (item.isTitle) {
+                return (
+                  <li key={item.key} className={`nav-section-title ${isSidebarOpen ? '' : 'hidden'}`}>
+                    {item.label}
+                  </li>
+                );
+              }
+              
+              return (
+                <li key={item.key} className="nav-item">
+                  {item.children && item.children.length > 0 ? (
+                    <>
+                      <button 
+                        className={`nav-link sub-toggle ${expandedMenus[item.key] ? 'expanded' : ''}`}
+                        onClick={() => toggleSubMenu(item.key)}
+                      >
+                        <span className="nav-icon">{getIcon(item.icon)}</span>
+                        <span className="nav-text">{item.label}</span>
+                        <span className="nav-chevron">
+                          {expandedMenus[item.key] ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                        </span>
+                      </button>
+                      {expandedMenus[item.key] && isSidebarOpen && (
+                        <ul className="sub-nav-list">
+                          {item.children.map(sub => (
+                            <li key={sub.key}>
+                              <NavLink 
+                                to={`/dashboard${sub.url}`} 
+                                className={({ isActive }) => `sub-nav-link ${isActive ? 'active' : ''}`}
+                              >
+                                <span className="sub-nav-dot"></span>
+                                <span className="sub-nav-text">{sub.label}</span>
+                              </NavLink>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </>
+                  ) : (
+                    <NavLink 
+                      to={`/dashboard${item.url || ''}`} 
+                      className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
                     >
-                      <span className="nav-icon">{item.icon}</span>
-                      <span className="nav-text">{item.name}</span>
-                      <span className="nav-chevron">
-                        {expandedMenus[item.name] ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-                      </span>
-                    </button>
-                    {expandedMenus[item.name] && isSidebarOpen && (
-                      <ul className="sub-nav-list">
-                        {item.subItems.map(sub => (
-                          <li key={sub.name}>
-                            <NavLink 
-                              to={sub.path} 
-                              className={({ isActive }) => `sub-nav-link ${isActive ? 'active' : ''}`}
-                            >
-                              <span className="sub-nav-dot"></span>
-                              <span className="sub-nav-text">{sub.name}</span>
-                            </NavLink>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </>
-                ) : (
-                  <NavLink 
-                    to={item.path} 
-                    end={item.exact}
-                    className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-                  >
-                    <span className="nav-icon">{item.icon}</span>
-                    <span className="nav-text">{item.name}</span>
-                  </NavLink>
-                )}
-              </li>
-            ))}
+                      <span className="nav-icon">{getIcon(item.icon)}</span>
+                      <span className="nav-text">{item.label}</span>
+                    </NavLink>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
@@ -302,6 +319,13 @@ export default function DashboardLayout() {
           flex: 1;
           padding: 1.5rem 1rem;
           overflow-y: auto;
+          /* Hide scrollbar for all browsers */
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
+        }
+
+        .sidebar-nav::-webkit-scrollbar {
+          display: none; /* Chrome, Safari and Opera */
         }
 
         .sidebar-nav ul {
@@ -330,6 +354,27 @@ export default function DashboardLayout() {
           font-size: 0.95rem;
           white-space: nowrap;
           overflow: hidden;
+        }
+
+        .nav-section-title {
+          font-size: 0.75rem;
+          font-weight: 700;
+          color: var(--color-text-muted);
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          padding: 1.5rem 1rem 0.5rem 1rem;
+          margin-top: 0.5rem;
+          white-space: nowrap;
+          overflow: hidden;
+          transition: opacity 0.2s ease, height 0.2s ease, padding 0.2s ease;
+        }
+
+        .nav-section-title.hidden {
+          opacity: 0;
+          padding-top: 0;
+          padding-bottom: 0;
+          height: 0;
+          margin: 0;
         }
 
         .nav-link:hover, .sub-toggle:hover {

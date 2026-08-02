@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\NavigationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user()->load('tenant');
     });
+    
+    // Dynamic Navigation Endpoint
+    Route::get('/navigation', [NavigationController::class, 'index']);
 });
 
 Route::apiResource('companies', CompanyController::class);

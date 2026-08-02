@@ -47,9 +47,31 @@ export const authService = {
   },
 
   /**
-   * Logout user and clear token
+   * Save navigation config to local storage
+   * @param {Array} navData 
+   */
+  setNavigation: (navData) => {
+    localStorage.setItem('navigation_config', JSON.stringify(navData));
+  },
+
+  /**
+   * Get navigation config from local storage
+   * @returns {Array}
+   */
+  getNavigation: () => {
+    const nav = localStorage.getItem('navigation_config');
+    try {
+      return nav ? JSON.parse(nav) : [];
+    } catch {
+      return [];
+    }
+  },
+
+  /**
+   * Logout user and clear token & nav
    */
   logout: () => {
     localStorage.removeItem('auth_token');
+    localStorage.removeItem('navigation_config');
   }
 };

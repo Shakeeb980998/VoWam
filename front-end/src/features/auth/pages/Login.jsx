@@ -85,6 +85,11 @@ export default function Login() {
                   authService.setToken(response.token);
                 }
                 
+                // Save the dynamic navigation from the backend
+                if (response.navigation) {
+                  authService.setNavigation(response.navigation);
+                }
+                
                 // Navigate to dashboard on success
                 navigate('/dashboard');
               } catch (err) {
