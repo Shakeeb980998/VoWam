@@ -636,6 +636,479 @@ return [
         ],
     ],
     'permissions' => [
-        // permissions omitted for brevity in response...
-    ]
+        // Dashboard children
+        [
+            'label' => 'Grid',
+            'key' => 'dashboard-crm',
+            'permission_name' => 'dashboard-crm_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'dashboard-analytics',
+            'permission_name' => 'dashboard-analytics_grid',
+        ],
+        // My Account children
+        [
+            'label' => 'Grid',
+            'key' => 'profile',
+            'permission_name' => 'profile_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'in_out',
+            'permission_name' => 'in_out_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'profile_leave',
+            'permission_name' => 'profile_leave_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'my_field_task',
+            'permission_name' => 'my_field_task_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'approvals',
+            'permission_name' => 'approvals_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'my-owned-assets',
+            'permission_name' => 'my_asset_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'team_activity',
+            'permission_name' => 'team_activity_grid',
+        ],
+        // Attendance children
+        [
+            'label' => 'Grid',
+            'key' => 'day_attendence',
+            'permission_name' => 'day_attendence_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'shifts',
+            'permission_name' => 'shifts_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'attendance_history',
+            'permission_name' => 'attendance_history_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'attendance_summary',
+            'permission_name' => 'attendance_summary_grid',
+        ],
+        // Leave children
+        [
+            'label' => 'Grid',
+            'key' => 'leaves',
+            'permission_name' => 'leaves_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'leave_type',
+            'permission_name' => 'leave_type_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'leave_group',
+            'permission_name' => 'leave_group_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'leave_adjustment',
+            'permission_name' => 'leave_adjustment_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'leave_report',
+            'permission_name' => 'leave_report_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'leave_summary',
+            'permission_name' => 'leave_summary_grid',
+        ],
+        // Asset Maintenance children
+        [
+            'label' => 'Grid',
+            'key' => 'assets',
+            'permission_name' => 'assets_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'rental',
+            'permission_name' => 'rental_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'asset_allocation',
+            'permission_name' => 'asset_allocation_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'asset_maintenance',
+            'permission_name' => 'asset_maintenance_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'expense-type',
+            'permission_name' => 'expense_type_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'income_type',
+            'permission_name' => 'income_type_grid',
+        ],
+        // Invoice/Bill children
+        [
+            'label' => 'Grid',
+            'key' => 'invoice',
+            'permission_name' => 'invoice_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'create_purchase',
+            'permission_name' => 'create_purchase_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'create_expense',
+            'permission_name' => 'create_expense_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'all_invoices',
+            'permission_name' => 'all_invoices_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'daybook_report',
+            'permission_name' => 'daybook_report_grid',
+        ],
+        // Payroll children
+        [
+            'label' => 'Grid',
+            'key' => 'salary_category',
+            'permission_name' => 'salary_category_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'benefits',
+            'permission_name' => 'benefits_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'salary_declaration',
+            'permission_name' => 'salary_declaration_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'salary_addition_deduction',
+            'permission_name' => 'salary_addition_deduction_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'payroll_template',
+            'permission_name' => 'payroll_template_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'payroll_process',
+            'permission_name' => 'payroll_process_grid',
+        ],
+
+        //loan children
+        [
+            'label' => 'Grid',
+            'key' => 'loan_type',
+            'permission_name' => 'loan_type_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'loan_report',
+            'permission_name' => 'loan_report_grid',
+        ],
+        // Settings children
+        [
+            'label' => 'Grid',
+            'key' => 'users',
+            'permission_name' => 'users_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'designation',
+            'permission_name' => 'designation_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'departments',
+            'permission_name' => 'departments_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'roles',
+            'permission_name' => 'roles_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'navigation',
+            'permission_name' => 'navigation_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'calendar_setup',
+            'permission_name' => 'calendar_setup_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'approval_levels',
+            'permission_name' => 'approval_levels_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'policy',
+            'permission_name' => 'policy_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'customers',
+            'permission_name' => 'customers_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'items',
+            'permission_name' => 'items_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'request_status',
+            'permission_name' => 'request_status_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'company_configuration',
+            'permission_name' => 'company_configuration_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'suppliers',
+            'permission_name' => 'suppliers_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'locations',
+            'permission_name' => 'locations_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'maintenance_categoryions',
+            'permission_name' => 'maintenance_categoryions_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'my_account_task',
+            'permission_name' => 'my_account_task_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'main_task',
+            'permission_name' => 'main_task_grid',
+        ],
+        // Task
+        [
+            'label' => 'Grid',
+            'key' => 'field_task',
+            'permission_name' => 'field_task_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'maintenance_task',
+            'permission_name' => 'maintenance_task_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'my_maintenance_task',
+            'permission_name' => 'my_maintenance_task_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'attendance_live_location',
+            'permission_name' => 'attendance_live_location_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'payslip_categories',
+            'permission_name' => 'payslip_categories_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'shift_schedule',
+            'permission_name' => 'shift_schedule_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'payslips',
+            'permission_name' => 'payslips_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'payslip_upload',
+            'permission_name' => 'payslip_upload_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'payslip_template',
+            'permission_name' => 'payslip_template_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'my_customers',
+            'permission_name' => 'my_customers_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'bank_master',
+            'permission_name' => 'bank_master_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'company_hierarchy',
+            'permission_name' => 'company_hierarchy_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'paye_slab',
+            'permission_name' => 'paye_slab_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'my_loan_request',
+            'permission_name' => 'my_loan_request_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'my_advance_request',
+            'permission_name' => 'my_advance_request_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'loan_request',
+            'permission_name' => 'loan_request_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'advance_request',
+            'permission_name' => 'advance_request_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'loan_schedules',
+            'permission_name' => 'loan_schedules_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'advance_type',
+            'permission_name' => 'advance_type_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'dashboard-hr',
+            'permission_name' => 'dashboard-hr_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'crm_task',
+            'permission_name' => 'crm_task_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'my_crm_task',
+            'permission_name' => 'my_crm_task_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'crm-pipelines',
+            'permission_name' => 'crm-pipelines_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'crm_pipeline_stage',
+            'permission_name' => 'crm_pipeline_stage_grid',
+        ],
+        [
+            'label' => 'General',
+            'key' => 'dashboard-task',
+            'permission_name' => 'dashboard_task_general',
+        ],
+        [
+            'label' => 'Field',
+            'key' => 'dashboard-task',
+            'permission_name' => 'dashboard_task_field',
+        ],
+        [
+            'label' => 'Maintenance',
+            'key' => 'dashboard-task',
+            'permission_name' => 'dashboard_task_maintenance',
+        ],
+        [
+            'label' => 'Crm',
+            'key' => 'dashboard-task',
+            'permission_name' => 'dashboard_task_crm',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'dashboard-iou',
+            'permission_name' => 'dashboard-iou_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'my_iou_request',
+            'permission_name' => 'my_iou_request_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'iou_request',
+            'permission_name' => 'iou_request_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'iou_type',
+            'permission_name' => 'iou_type_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'iou_expense_type',
+            'permission_name' => 'iou_expense_type_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'iou_employee_report',
+            'permission_name' => 'iou_employee_report_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'iou_outstanding',
+            'permission_name' => 'iou_outstanding_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'asset_income',
+            'permission_name' => 'asset_income_grid',
+        ],
+        [
+            'label' => 'Grid',
+            'key' => 'asset_expense',
+            'permission_name' => 'asset_expense_grid',
+        ]
+
+
+
+    ],
 ];
