@@ -1,16 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import HeroSection from '../components/HeroSection';
 import DashboardShowcase from '../components/DashboardShowcase';
 import TrustBar from '../components/TrustBar';
 import FeatureGrid from '../components/FeatureGrid';
 import IndustrySelector from '../components/IndustrySelector';
 import WhyVowam from '../components/WhyVowam';
+import AboutSection from '../components/AboutSection';
 import ScreenshotsGallery from '../components/ScreenshotsGallery';
 import PricingTeaser from '../components/PricingTeaser';
 import FaqSection from '../components/FaqSection';
 import FinalCTA from '../components/FinalCTA';
 
 export default function Home() {
+  useEffect(() => {
+    if (window.location.hash) {
+      const id = window.location.hash.replace('#', '');
+      const elem = document.getElementById(id);
+      if (elem) {
+        setTimeout(() => {
+          const headerOffset = 80;
+          const elementPosition = elem.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          window.scrollTo({
+               top: offsetPosition,
+               behavior: "smooth"
+          });
+        }, 100);
+      }
+    }
+  }, []);
+
   return (
     <div className="home-page fade-in">
       <HeroSection />
@@ -29,6 +48,9 @@ export default function Home() {
       
       {/* 6. Why Vowam */}
       <WhyVowam />
+
+      {/* 6.5 About */}
+      <AboutSection />
       
       {/* 7. Screenshots */}
       <ScreenshotsGallery />

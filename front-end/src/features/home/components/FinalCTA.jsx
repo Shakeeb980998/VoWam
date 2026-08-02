@@ -1,6 +1,6 @@
 export default function FinalCTA() {
   return (
-    <section className="final-cta">
+    <section className="final-cta" id="contact">
       <div className="cta-content">
         <h2>Ready to reshape your ledger?</h2>
         <p>Join the future of multi-tenant enterprise accounting.</p>

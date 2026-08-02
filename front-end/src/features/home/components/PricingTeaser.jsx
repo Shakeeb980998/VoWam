@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 
 export default function PricingTeaser() {
   return (
-    <section className="pricing-teaser">
+    <section className="pricing-teaser" id="pricing">
       <div className="pricing-container">
         <motion.div 
           className="pricing-card glass-panel"

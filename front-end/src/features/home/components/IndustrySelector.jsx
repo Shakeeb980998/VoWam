@@ -103,7 +103,7 @@ export default function IndustrySelector() {
   const activeData = industries.find(ind => ind.id === activeTab);
 
   return (
-    <section className="industry-section">
+    <section className="industry-section" id="solutions">
       <div className="section-container">
         <div className="section-header text-center">
           <h2>Engineered for your industry</h2>

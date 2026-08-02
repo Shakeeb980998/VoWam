@@ -17,6 +17,23 @@ export default function Header() {
 
   const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
+  const handleNavClick = (e, targetId) => {
+    if (window.location.pathname === '/') {
+      e.preventDefault();
+      const elem = document.getElementById(targetId);
+      if (elem) {
+        const headerOffset = 80;
+        const elementPosition = elem.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({
+             top: offsetPosition,
+             behavior: "smooth"
+        });
+      }
+      setIsMobileMenuOpen(false);
+    }
+  };
+
   return (
     <header className={`app-header ${scrolled ? 'scrolled' : ''} animate-fade-in`}>
       <div className="header-content">
@@ -27,11 +44,11 @@ export default function Header() {
 
         {/* Desktop Navigation */}
         <nav className="header-nav desktop-nav">
-          <Link to="#features" className="nav-link">Features</Link>
-          <Link to="#solutions" className="nav-link">Solutions</Link>
-          <Link to="#pricing" className="nav-link">Pricing</Link>
-          <Link to="#about" className="nav-link">About</Link>
-          <Link to="#contact" className="nav-link">Contact</Link>
+          <Link to="/#features" className="nav-link" onClick={(e) => handleNavClick(e, 'features')}>Features</Link>
+          <Link to="/#solutions" className="nav-link" onClick={(e) => handleNavClick(e, 'solutions')}>Solutions</Link>
+          <Link to="/#pricing" className="nav-link" onClick={(e) => handleNavClick(e, 'pricing')}>Pricing</Link>
+          <Link to="/#about" className="nav-link" onClick={(e) => handleNavClick(e, 'about')}>About</Link>
+          <Link to="/#contact" className="nav-link" onClick={(e) => handleNavClick(e, 'contact')}>Contact</Link>
           <div className="nav-actions">
             <Link to="/login" className="btn btn-text">Login</Link>
             <Link to="/register" className="btn btn-primary">Get Started</Link>
@@ -47,11 +64,11 @@ export default function Header() {
       {/* Mobile Navigation Dropdown */}
       {isMobileMenuOpen && (
         <div className="mobile-nav glass-panel">
-          <Link to="#features" className="mobile-nav-link" onClick={toggleMenu}>Features</Link>
-          <Link to="#solutions" className="mobile-nav-link" onClick={toggleMenu}>Solutions</Link>
-          <Link to="#pricing" className="mobile-nav-link" onClick={toggleMenu}>Pricing</Link>
-          <Link to="#about" className="mobile-nav-link" onClick={toggleMenu}>About</Link>
-          <Link to="#contact" className="mobile-nav-link" onClick={toggleMenu}>Contact</Link>
+          <Link to="/#features" className="mobile-nav-link" onClick={(e) => handleNavClick(e, 'features')}>Features</Link>
+          <Link to="/#solutions" className="mobile-nav-link" onClick={(e) => handleNavClick(e, 'solutions')}>Solutions</Link>
+          <Link to="/#pricing" className="mobile-nav-link" onClick={(e) => handleNavClick(e, 'pricing')}>Pricing</Link>
+          <Link to="/#about" className="mobile-nav-link" onClick={(e) => handleNavClick(e, 'about')}>About</Link>
+          <Link to="/#contact" className="mobile-nav-link" onClick={(e) => handleNavClick(e, 'contact')}>Contact</Link>
           <div className="mobile-nav-actions">
             <Link to="/login" className="btn btn-text mobile-btn" onClick={toggleMenu}>Login</Link>
             <Link to="/register" className="btn btn-primary mobile-btn" onClick={toggleMenu}>Get Started</Link>
