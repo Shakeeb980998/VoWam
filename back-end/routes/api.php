@@ -31,6 +31,9 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware(['auth:sanctum', 'tenant'])->group(function () {
     // Roles Management
     Route::apiResource('roles', RoleController::class);
+    Route::get('roles/{role}/navigations', [RoleController::class, 'getNavigations']);
+    Route::post('roles/{role}/navigations', [RoleController::class, 'syncNavigations']);
+    
     // Departments Management
     Route::apiResource('departments', DepartmentController::class);
     // Designations Management

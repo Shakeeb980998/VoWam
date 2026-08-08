@@ -14,6 +14,14 @@ class Role extends Model
     ];
 
     /**
+     * Get the navigations assigned to the role.
+     */
+    public function navigations()
+    {
+        return $this->hasMany(RoleNavigation::class);
+    }
+
+    /**
      * Users associated with this role.
      */
     public function users(): BelongsToMany

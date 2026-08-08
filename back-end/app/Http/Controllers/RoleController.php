@@ -92,4 +92,88 @@ class RoleController extends Controller
             'message' => 'Role deleted successfully'
         ]);
     }
+
+    /**
+     * Get the navigations assigned to the role.
+     */
+    public function getNavigations($id)
+    {
+        $role = Role::findOrFail($id);
+        $navigations = $role->navigations()->pluck('navigation_key');
+        return response()->json(['data' => $navigations]);
+    }
+
+    /**
+     * Sync navigations for the role.
+     */
+    public function syncNavigations(Request $request, $id)
+    {
+        $role = Role::findOrFail($id);
+        $validated = $request->request->all();
+        // Since request->validate strips if not explicitly defined, let's get the keys
+        $navKeys = $request->input('navigation_keys', []);
+
+        // 1. Sync Navigations
+        $role->navigations()->delete();
+
+        $navigations = [];
+        foreach ($navKeys as $key) {
+            $navigations[] = [
+                'role_id' => $role->id,
+                'navigation_key' => $key,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        if (count($navigations) > 0) {
+            \App\Models\RoleNavigation::insert($navigations);
+        }
+
+        // 2. Sync Permissions based on selected Navigations
+        $configPermissions = config('navigation.permissions', []);
+        
+        // Find all permission names associated with the selected navigation keys
+        $permissionNames = [];
+        foreach ($configPermissions as $perm) {
+            if (in_array($perm['key'], $navKeys)) {
+                $permissionNames[] = $perm['permission_name'];
+            }
+        }
+        $permissionNames = array_unique($permissionNames);
+
+        // Ensure permissions exist in the `permissions` table
+        foreach ($permissionNames as $name) {
+            \Illuminate\Support\Facades\DB::table('permissions')->updateOrInsert(
+                ['name' => $name, 'guard_name' => 'web'],
+                ['created_at' => now(), 'updated_at' => now()]
+            );
+        }
+
+        // Get IDs of these permissions
+        $permissionIds = [];
+        if (count($permissionNames) > 0) {
+            $permissionIds = \Illuminate\Support\Facades\DB::table('permissions')
+                ->whereIn('name', $permissionNames)
+                ->pluck('id')
+                ->toArray();
+        }
+
+        // Sync `role_has_permissions`
+        \Illuminate\Support\Facades\DB::table('role_has_permissions')->where('role_id', $role->id)->delete();
+
+        $rolePermissions = [];
+        foreach ($permissionIds as $pId) {
+            $rolePermissions[] = [
+                'role_id' => $role->id,
+                'permission_id' => $pId,
+            ];
+        }
+
+        if (count($rolePermissions) > 0) {
+            \Illuminate\Support\Facades\DB::table('role_has_permissions')->insert($rolePermissions);
+        }
+
+        return response()->json(['message' => 'Navigations and permissions synced successfully']);
+    }
 }
