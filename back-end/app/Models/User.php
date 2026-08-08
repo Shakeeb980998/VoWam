@@ -15,8 +15,7 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
 
-    // Users reside in the central database
-    protected $connection = 'mysql';
+    // Connection is handled dynamically by multi-tenancy middleware
 
     /**
      * The attributes that are mass assignable.
@@ -24,12 +23,24 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'central_user_id',
         'tenant_id',
         'company_id',
+        'role_id',
         'name',
         'email',
         'password',
+        'avatar_url',
+        'status',
     ];
+
+    /**
+     * Get the user's detailed profile information.
+     */
+    public function details()
+    {
+        return $this->hasOne(UserDetail::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -63,10 +74,10 @@ class User extends Authenticatable
     }
 
     /**
-     * The roles assigned to this user.
+     * The role assigned to this user.
      */
-    public function roles(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function role(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsTo(Role::class);
     }
 }

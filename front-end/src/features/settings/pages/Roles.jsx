@@ -3,6 +3,7 @@ import { Search, Plus, Edit2, Trash2, ChevronLeft, ChevronRight, AlertCircle } f
 import { motion, AnimatePresence } from 'framer-motion';
 import RoleModal from '../components/RoleModal';
 import { roleService } from '../services/roleService';
+import { useToast } from '../../../contexts/ToastContext';
 
 export default function Roles() {
   const [roles, setRoles] = useState([]);
@@ -16,14 +17,17 @@ export default function Roles() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingRole, setEditingRole] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [formData, setFormData] = useState({ code: '', description: '' });
+
+  const { showToast } = useToast();
 
   // Fetch Roles
   const fetchRoles = async () => {
-    setIsLoading(true);
-    setError(null);
     try {
+      setIsLoading(true);
       const data = await roleService.getRoles();
       setRoles(data);
+      setError(null);
     } catch (err) {
       setError(err.message || 'Failed to fetch roles');
     } finally {
@@ -67,39 +71,32 @@ export default function Roles() {
     setIsModalOpen(true);
   };
 
-  const handleDeleteRole = async (id) => {
+  const handleDeleteRole = async (role) => {
     if (window.confirm("Are you sure you want to delete this role?")) {
       try {
-        await roleService.deleteRole(id);
-        setRoles(roles.filter(r => r.id !== id));
-        if (currentItems.length === 1 && currentPage > 1) {
-          setCurrentPage(currentPage - 1);
-        }
+        await roleService.deleteRole(role.id);
+        showToast('Role deleted successfully', 'success');
+        fetchRoles();
       } catch (err) {
-        alert(err.message || 'Failed to delete role');
+        showToast(err.message || 'Failed to delete role', 'error');
       }
     }
   };
 
-  const handleSaveRole = async (roleData) => {
+  const handleSaveRole = async (formData) => {
     setIsSaving(true);
     try {
       if (editingRole) {
-        const updated = await roleService.updateRole(editingRole.id, {
-          code: roleData.code,
-          description: roleData.description
-        });
-        setRoles(roles.map(r => r.id === updated.id ? updated : r));
+        await roleService.updateRole(editingRole.id, formData);
+        showToast('Role updated successfully', 'success');
       } else {
-        const created = await roleService.createRole({
-          code: roleData.code,
-          description: roleData.description
-        });
-        setRoles([created, ...roles]);
+        await roleService.createRole(formData);
+        showToast('Role created successfully', 'success');
       }
       setIsModalOpen(false);
+      fetchRoles();
     } catch (err) {
-      alert(err.message || 'Failed to save role');
+      showToast(err.message || 'Failed to save role', 'error');
     } finally {
       setIsSaving(false);
     }

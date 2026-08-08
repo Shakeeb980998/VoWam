@@ -8,6 +8,8 @@ import Roles from '../features/settings/pages/Roles';
 import Departments from '../features/settings/pages/Departments';
 import Designations from '../features/settings/pages/Designations';
 import Navigations from '../features/settings/pages/Navigations';
+import Users from '../features/settings/pages/Users';
+import UserForm from '../features/settings/pages/UserForm';
 
 const router = createBrowserRouter([
   {
@@ -43,6 +45,18 @@ const router = createBrowserRouter([
       {
         path: 'navigations',
         element: <Navigations />,
+      },
+      {
+        path: 'users',
+        element: <Users />,
+      },
+      {
+        path: 'users/create',
+        element: <UserForm />,
+      },
+      {
+        path: 'users/:id/edit',
+        element: <UserForm />,
       }
     ]
   },

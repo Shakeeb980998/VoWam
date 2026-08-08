@@ -3,6 +3,7 @@ import { Search, Plus, Edit2, Trash2, ChevronLeft, ChevronRight, AlertCircle } f
 import { motion, AnimatePresence } from 'framer-motion';
 import DepartmentModal from '../components/DepartmentModal';
 import { departmentService } from '../services/departmentService';
+import { useToast } from '../../../contexts/ToastContext';
 
 export default function Departments() {
   const [departments, setDepartments] = useState([]);
@@ -16,6 +17,8 @@ export default function Departments() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDepartment, setEditingDepartment] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
+
+  const { showToast } = useToast();
 
   // Fetch Departments
   const fetchDepartments = async () => {
@@ -67,39 +70,32 @@ export default function Departments() {
     setIsModalOpen(true);
   };
 
-  const handleDeleteDepartment = async (id) => {
+  const handleDeleteDepartment = async (department) => {
     if (window.confirm("Are you sure you want to delete this department?")) {
       try {
-        await departmentService.deleteDepartment(id);
-        setDepartments(departments.filter(r => r.id !== id));
-        if (currentItems.length === 1 && currentPage > 1) {
-          setCurrentPage(currentPage - 1);
-        }
+        await departmentService.deleteDepartment(department.id);
+        showToast('Department deleted successfully', 'success');
+        fetchDepartments();
       } catch (err) {
-        alert(err.message || 'Failed to delete department');
+        showToast(err.message || 'Failed to delete department', 'error');
       }
     }
   };
 
-  const handleSaveDepartment = async (departmentData) => {
+  const handleSaveDepartment = async (formData) => {
     setIsSaving(true);
     try {
       if (editingDepartment) {
-        const updated = await departmentService.updateDepartment(editingDepartment.id, {
-          code: departmentData.code,
-          description: departmentData.description
-        });
-        setDepartments(departments.map(r => r.id === updated.id ? updated : r));
+        await departmentService.updateDepartment(editingDepartment.id, formData);
+        showToast('Department updated successfully', 'success');
       } else {
-        const created = await departmentService.createDepartment({
-          code: departmentData.code,
-          description: departmentData.description
-        });
-        setDepartments([created, ...departments]);
+        await departmentService.createDepartment(formData);
+        showToast('Department created successfully', 'success');
       }
       setIsModalOpen(false);
+      fetchDepartments();
     } catch (err) {
-      alert(err.message || 'Failed to save department');
+      showToast(err.message || 'Failed to save department', 'error');
     } finally {
       setIsSaving(false);
     }
@@ -173,7 +169,7 @@ export default function Departments() {
                         <button className="action-btn edit" onClick={() => handleEditDepartment(department)} title="Edit Department">
                           <Edit2 size={16} />
                         </button>
-                        <button className="action-btn delete" onClick={() => handleDeleteDepartment(department.id)} title="Delete Department">
+                        <button className="action-btn delete" onClick={() => handleDeleteDepartment(department)} title="Delete Department">
                           <Trash2 size={16} />
                         </button>
                       </td>

@@ -6,6 +6,7 @@ use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // Tenant-Aware Authenticated Routes
 Route::middleware(['auth:sanctum', 'tenant'])->group(function () {
+    // Users Management
+    Route::get('users/form-dependencies', [UserController::class, 'formDependencies']);
+    Route::apiResource('users', UserController::class);
+
     // Roles Management
     Route::apiResource('roles', RoleController::class);
     Route::get('roles/{role}/navigations', [RoleController::class, 'getNavigations']);

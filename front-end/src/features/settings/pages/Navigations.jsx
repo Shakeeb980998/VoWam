@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Save, AlertCircle, Shield, CheckSquare, Square, MinusSquare, CheckCircle, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { Save, AlertCircle, Shield, CheckSquare, Square, MinusSquare } from 'lucide-react';
 import { roleService } from '../services/roleService';
 import { navigationService } from '../services/navigationService';
+import { useToast } from '../../../contexts/ToastContext';
 
 export default function Navigations() {
   const [roles, setRoles] = useState([]);
@@ -13,7 +13,7 @@ export default function Navigations() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState(null);
-  const [toast, setToast] = useState({ show: false, message: '', type: '' });
+  const { showToast } = useToast();
 
   // Fetch roles and system navigation structure on mount
   useEffect(() => {
@@ -57,12 +57,6 @@ export default function Navigations() {
     fetchRoleNavigations();
   }, [selectedRole]);
 
-  const showToast = (message, type = 'success') => {
-    setToast({ show: true, message, type });
-    setTimeout(() => {
-      setToast(prev => ({ ...prev, show: false }));
-    }, 4000);
-  };
 
   // Handle Save
   const handleSave = async () => {
@@ -184,30 +178,7 @@ export default function Navigations() {
 
   return (
     <div className="page-container">
-      {/* Toast Notification */}
-      <AnimatePresence>
-        {toast.show && (
-          <motion.div
-            initial={{ opacity: 0, y: -20, x: '-50%' }}
-            animate={{ opacity: 1, y: 0, x: '-50%' }}
-            exit={{ opacity: 0, y: -20, x: '-50%' }}
-            className={`toast-notification ${toast.type}`}
-          >
-            {toast.type === 'success' ? (
-              <CheckCircle size={20} className="toast-icon success" />
-            ) : (
-              <AlertCircle size={20} className="toast-icon error" />
-            )}
-            <span className="toast-message">{toast.message}</span>
-            <button 
-              className="toast-close"
-              onClick={() => setToast(prev => ({ ...prev, show: false }))}
-            >
-              <X size={16} />
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
 
       <div className="page-header">
         <div>
@@ -528,62 +499,6 @@ export default function Navigations() {
           to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Toast Notification Styles */
-        .toast-notification {
-          position: fixed;
-          top: 2rem;
-          left: 50%;
-          z-index: 1000;
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          padding: 1rem 1.25rem;
-          background: white;
-          border-radius: var(--border-radius-lg);
-          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-          border: 1px solid var(--color-border-subtle);
-          min-width: 300px;
-        }
-
-        .toast-notification.success {
-          border-left: 4px solid #10b981;
-        }
-
-        .toast-notification.error {
-          border-left: 4px solid #ef4444;
-        }
-
-        .toast-icon.success {
-          color: #10b981;
-        }
-
-        .toast-icon.error {
-          color: #ef4444;
-        }
-
-        .toast-message {
-          font-weight: 500;
-          color: var(--color-text-primary);
-          flex: 1;
-        }
-
-        .toast-close {
-          background: none;
-          border: none;
-          color: var(--color-text-muted);
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 0.25rem;
-          border-radius: 4px;
-          transition: all 0.2s;
-        }
-
-        .toast-close:hover {
-          background: var(--color-bg-surface);
-          color: var(--color-text-primary);
-        }
       `}</style>
     </div>
   );

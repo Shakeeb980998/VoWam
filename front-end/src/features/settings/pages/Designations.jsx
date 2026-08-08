@@ -3,6 +3,7 @@ import { Search, Plus, Edit2, Trash2, ChevronLeft, ChevronRight, AlertCircle } f
 import { motion, AnimatePresence } from 'framer-motion';
 import DesignationModal from '../components/DesignationModal';
 import { designationService } from '../services/designationService';
+import { useToast } from '../../../contexts/ToastContext';
 
 export default function Designations() {
   const [designations, setDesignations] = useState([]);
@@ -16,6 +17,8 @@ export default function Designations() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDesignation, setEditingDesignation] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
+
+  const { showToast } = useToast();
 
   // Fetch Designations
   const fetchDesignations = async () => {
@@ -67,39 +70,32 @@ export default function Designations() {
     setIsModalOpen(true);
   };
 
-  const handleDeleteDesignation = async (id) => {
+  const handleDeleteDesignation = async (designation) => {
     if (window.confirm("Are you sure you want to delete this designation?")) {
       try {
-        await designationService.deleteDesignation(id);
-        setDesignations(designations.filter(r => r.id !== id));
-        if (currentItems.length === 1 && currentPage > 1) {
-          setCurrentPage(currentPage - 1);
-        }
+        await designationService.deleteDesignation(designation.id);
+        showToast('Designation deleted successfully', 'success');
+        fetchDesignations();
       } catch (err) {
-        alert(err.message || 'Failed to delete designation');
+        showToast(err.message || 'Failed to delete designation', 'error');
       }
     }
   };
 
-  const handleSaveDesignation = async (designationData) => {
+  const handleSaveDesignation = async (formData) => {
     setIsSaving(true);
     try {
       if (editingDesignation) {
-        const updated = await designationService.updateDesignation(editingDesignation.id, {
-          code: designationData.code,
-          description: designationData.description
-        });
-        setDesignations(designations.map(r => r.id === updated.id ? updated : r));
+        await designationService.updateDesignation(editingDesignation.id, formData);
+        showToast('Designation updated successfully', 'success');
       } else {
-        const created = await designationService.createDesignation({
-          code: designationData.code,
-          description: designationData.description
-        });
-        setDesignations([created, ...designations]);
+        await designationService.createDesignation(formData);
+        showToast('Designation created successfully', 'success');
       }
       setIsModalOpen(false);
+      fetchDesignations();
     } catch (err) {
-      alert(err.message || 'Failed to save designation');
+      showToast(err.message || 'Failed to save designation', 'error');
     } finally {
       setIsSaving(false);
     }
@@ -173,7 +169,7 @@ export default function Designations() {
                         <button className="action-btn edit" onClick={() => handleEditDesignation(designation)} title="Edit Designation">
                           <Edit2 size={16} />
                         </button>
-                        <button className="action-btn delete" onClick={() => handleDeleteDesignation(designation.id)} title="Delete Designation">
+                        <button className="action-btn delete" onClick={() => handleDeleteDesignation(designation)} title="Delete Designation">
                           <Trash2 size={16} />
                         </button>
                       </td>
