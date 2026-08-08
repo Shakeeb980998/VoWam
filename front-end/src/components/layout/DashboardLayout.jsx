@@ -31,6 +31,19 @@ export default function DashboardLayout() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const navigate = useNavigate();
 
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+
+  // Close profile dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isProfileDropdownOpen && !event.target.closest('.user-profile-container')) {
+        setIsProfileDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isProfileDropdownOpen]);
+
   const toggleSubMenu = (menuName) => {
     setExpandedMenus(prev => ({
       ...prev,
@@ -197,14 +210,43 @@ export default function DashboardLayout() {
               <span className="notification-badge">3</span>
             </button>
 
-            <div className="user-profile">
-              <div className="avatar">
-                <User size={20} />
+            <div className="user-profile-container">
+              <div 
+                className="user-profile" 
+                onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+              >
+                <div className="avatar">
+                  <User size={20} />
+                </div>
+                <div className="user-info">
+                  <span className="user-name">Admin User</span>
+                  <span className="user-role">Administrator</span>
+                </div>
+                <ChevronDown size={16} className={`profile-chevron ${isProfileDropdownOpen ? 'open' : ''}`} />
               </div>
-              <div className="user-info">
-                <span className="user-name">Admin User</span>
-                <span className="user-role">Administrator</span>
-              </div>
+              
+              {isProfileDropdownOpen && (
+                <div className="profile-dropdown">
+                  <div className="dropdown-header">
+                    <span className="dropdown-name">Admin User</span>
+                    <span className="dropdown-email">admin@vowam.com</span>
+                  </div>
+                  <div className="dropdown-divider"></div>
+                  <button className="dropdown-item" onClick={() => {}}>
+                    <User size={16} className="dropdown-icon" />
+                    <span>My Profile</span>
+                  </button>
+                  <button className="dropdown-item" onClick={() => {}}>
+                    <Settings size={16} className="dropdown-icon" />
+                    <span>Settings</span>
+                  </button>
+                  <div className="dropdown-divider"></div>
+                  <button className="dropdown-item text-danger" onClick={handleLogout}>
+                    <LogOut size={16} className="dropdown-icon" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </header>
@@ -611,6 +653,10 @@ export default function DashboardLayout() {
           border: 2px solid var(--color-bg-base);
         }
 
+        .user-profile-container {
+          position: relative;
+        }
+
         .user-profile {
           display: flex;
           align-items: center;
@@ -623,6 +669,90 @@ export default function DashboardLayout() {
 
         .user-profile:hover {
           background: var(--color-bg-surface);
+        }
+
+        .profile-chevron {
+          color: var(--color-text-muted);
+          transition: transform 0.2s ease;
+        }
+        
+        .profile-chevron.open {
+          transform: rotate(180deg);
+        }
+
+        .profile-dropdown {
+          position: absolute;
+          top: calc(100% + 10px);
+          right: 0;
+          width: 240px;
+          background: var(--color-bg-base);
+          border: 1px solid var(--color-border-subtle);
+          border-radius: var(--border-radius-md);
+          box-shadow: var(--shadow-lg);
+          padding: 0.5rem 0;
+          z-index: 1000;
+          animation: dropIn 0.2s ease;
+        }
+
+        @keyframes dropIn {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown-header {
+          padding: 0.75rem 1rem;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .dropdown-name {
+          font-weight: 600;
+          color: var(--color-text-primary);
+          font-size: 0.95rem;
+        }
+
+        .dropdown-email {
+          color: var(--color-text-muted);
+          font-size: 0.8rem;
+          margin-top: 0.1rem;
+        }
+
+        .dropdown-divider {
+          height: 1px;
+          background: var(--color-border-subtle);
+          margin: 0.5rem 0;
+        }
+
+        .dropdown-item {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          width: 100%;
+          padding: 0.75rem 1rem;
+          border: none;
+          background: transparent;
+          color: var(--color-text-secondary);
+          font-size: 0.9rem;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          text-align: left;
+        }
+
+        .dropdown-item:hover {
+          background: var(--color-bg-surface);
+          color: var(--color-accent-navy);
+        }
+
+        .dropdown-item.text-danger {
+          color: #dc2626;
+        }
+
+        .dropdown-item.text-danger:hover {
+          background: rgba(220, 38, 38, 0.05);
+        }
+
+        .dropdown-icon {
+          opacity: 0.7;
         }
 
         .avatar {

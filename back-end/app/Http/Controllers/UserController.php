@@ -71,11 +71,23 @@ class UserController extends Controller
 
         try {
             DB::beginTransaction();
+            
+            // Create in Central DB
+            $centralUserId = DB::connection('mysql')->table('users')->insertGetId([
+                'tenant_id' => tenant('id') ?? null,
+                'company_id' => $this->getTenantCompanyId(),
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'status' => 'active',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
 
-            // 1. Create User
+            // 1. Create User in Tenant DB
             $user = User::create([
-                'central_user_id' => 0, 
-                'tenant_id' => null, // Avoid request()->tenant() crash
+                'central_user_id' => $centralUserId, 
+                'tenant_id' => tenant('id') ?? null,
                 'company_id' => $this->getTenantCompanyId(),
                 'role_id' => $validated['role_id'] ?? null,
                 'name' => $validated['name'],
@@ -181,6 +193,31 @@ class UserController extends Controller
 
             $user->update($userData);
 
+            // Sync to Central DB if valid ID, else create it
+            if ($user->central_user_id > 0) {
+                DB::connection('mysql')->table('users')->where('id', $user->central_user_id)->update(array_merge(
+                    [
+                        'name' => $validated['name'],
+                        'email' => $validated['email'],
+                        'updated_at' => now(),
+                    ],
+                    !empty($validated['password']) ? ['password' => Hash::make($validated['password'])] : []
+                ));
+            } else {
+                // Retroactively create in central DB if it was missing
+                $centralUserId = DB::connection('mysql')->table('users')->insertGetId([
+                    'tenant_id' => tenant('id') ?? null,
+                    'company_id' => $this->getTenantCompanyId(),
+                    'name' => $validated['name'],
+                    'email' => $validated['email'],
+                    'password' => !empty($validated['password']) ? Hash::make($validated['password']) : $user->password,
+                    'status' => 'active',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+                $user->update(['central_user_id' => $centralUserId]);
+            }
+
             // Handle Profile Photo Upload
             $profilePhotoUrl = $user->details->profile_photo_url ?? null;
             if ($request->hasFile('profile_photo')) {
@@ -253,6 +290,11 @@ class UserController extends Controller
                 $user->details->delete();
             }
             
+            // Delete from Central DB if valid ID
+            if ($user->central_user_id > 0) {
+                DB::connection('mysql')->table('users')->where('id', $user->central_user_id)->delete();
+            }
+
             $user->delete();
             DB::commit();
             return response()->json(['message' => 'User deleted successfully']);
