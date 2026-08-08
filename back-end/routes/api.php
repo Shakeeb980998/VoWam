@@ -27,8 +27,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // Tenant-Aware Authenticated Routes
 Route::middleware(['auth:sanctum', 'tenant'])->group(function () {
-    // Dynamic Navigation Endpoint
-    Route::get('/navigation', [NavigationController::class, 'index']);
+    // Dynamic navigation based on roles
+    Route::get('/navigation', [\App\Http\Controllers\NavigationController::class, 'index']);
+
+    // Company Configuration (Tenant-specific)
+    Route::get('/company-info', [\App\Http\Controllers\TenantCompanyController::class, 'show']);
+    Route::post('/company-info', [\App\Http\Controllers\TenantCompanyController::class, 'update']);
 
     // Users Management
     Route::get('users/form-dependencies', [UserController::class, 'formDependencies']);

@@ -10,6 +10,7 @@ import Designations from '../features/settings/pages/Designations';
 import Navigations from '../features/settings/pages/Navigations';
 import Users from '../features/settings/pages/Users';
 import UserForm from '../features/settings/pages/UserForm';
+import CompanyConfiguration from '../features/settings/pages/CompanyConfiguration';
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
       {
         path: 'users/:id/edit',
         element: <UserForm />,
+      },
+      {
+        path: 'company-configuration',
+        element: <CompanyConfiguration />,
       }
     ]
   },

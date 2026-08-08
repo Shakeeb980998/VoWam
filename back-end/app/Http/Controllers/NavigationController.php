@@ -13,6 +13,12 @@ class NavigationController extends Controller
     {
         $navigation = config('navigation.navigation', []);
         
+        if ($request->query('full')) {
+            return response()->json([
+                'navigation' => $navigation
+            ]);
+        }
+        
         $user = $request->user();
         $allowedKeys = [];
         

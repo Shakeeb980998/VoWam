@@ -20,7 +20,7 @@ api.interceptors.request.use(
     }
 
     // You can also handle standard authorization tokens here
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('auth_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

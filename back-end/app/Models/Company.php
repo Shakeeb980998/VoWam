@@ -12,6 +12,22 @@ class Company extends Model
     protected $fillable = [
         'tenant_id',
         'name',
+        'legal_name',
+        'registration_number',
+        'tax_id',
+        'contact_email',
+        'contact_phone',
+        'website_url',
+        'address',
+        'city',
+        'state',
+        'zip_code',
+        'country',
+        'logo_path',
+        'timezone',
+        'industry_code',
+        'base_currency',
+        'fiscal_year_start'
     ];
 
     /**

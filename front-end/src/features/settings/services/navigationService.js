@@ -16,7 +16,7 @@ export const navigationService = {
    * @returns {Promise<Array>}
    */
   getSystemNavigation: async () => {
-    const response = await fetch(`${API_URL}/navigation`, {
+    const response = await fetch(`${API_URL}/navigation?full=1`, {
       method: 'GET',
       headers: getHeaders(),
     });
