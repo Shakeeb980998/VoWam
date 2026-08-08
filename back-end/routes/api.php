@@ -4,6 +4,8 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\DesignationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +31,10 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware(['auth:sanctum', 'tenant'])->group(function () {
     // Roles Management
     Route::apiResource('roles', RoleController::class);
+    // Departments Management
+    Route::apiResource('departments', DepartmentController::class);
+    // Designations Management
+    Route::apiResource('designations', DesignationController::class);
 });
 
 Route::apiResource('companies', CompanyController::class);

@@ -5,6 +5,8 @@ import Home from '../features/home/pages/Home';
 import Login from '../features/auth/pages/Login';
 import DashboardHome from '../features/dashboard/pages/DashboardHome';
 import Roles from '../features/settings/pages/Roles';
+import Departments from '../features/settings/pages/Departments';
+import Designations from '../features/settings/pages/Designations';
 
 const router = createBrowserRouter([
   {
@@ -28,6 +30,14 @@ const router = createBrowserRouter([
       {
         path: 'roles',
         element: <Roles />,
+      },
+      {
+        path: 'departments',
+        element: <Departments />,
+      },
+      {
+        path: 'designation',
+        element: <Designations />,
       }
     ]
   },

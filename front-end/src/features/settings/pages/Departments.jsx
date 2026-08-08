@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Search, Plus, Edit2, Trash2, ChevronLeft, ChevronRight, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import RoleModal from '../components/RoleModal';
-import { roleService } from '../services/roleService';
+import DepartmentModal from '../components/DepartmentModal';
+import { departmentService } from '../services/departmentService';
 
-export default function Roles() {
-  const [roles, setRoles] = useState([]);
+export default function Departments() {
+  const [departments, setDepartments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -14,41 +14,41 @@ export default function Roles() {
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingRole, setEditingRole] = useState(null);
+  const [editingDepartment, setEditingDepartment] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  // Fetch Roles
-  const fetchRoles = async () => {
+  // Fetch Departments
+  const fetchDepartments = async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await roleService.getRoles();
-      setRoles(data);
+      const data = await departmentService.getDepartments();
+      setDepartments(data);
     } catch (err) {
-      setError(err.message || 'Failed to fetch roles');
+      setError(err.message || 'Failed to fetch departments');
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchRoles();
+    fetchDepartments();
   }, []);
 
-  // Filter roles based on search query
-  const filteredRoles = useMemo(() => {
-    return roles.filter(role => 
-      role.code.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      role.description.toLowerCase().includes(searchQuery.toLowerCase())
+  // Filter departments based on search query
+  const filteredDepartments = useMemo(() => {
+    return departments.filter(department => 
+      department.code.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      department.description.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }, [roles, searchQuery]);
+  }, [departments, searchQuery]);
 
   // Pagination Logic
-  const totalPages = Math.ceil(filteredRoles.length / itemsPerPage) || 1;
+  const totalPages = Math.ceil(filteredDepartments.length / itemsPerPage) || 1;
   const currentItems = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
-    return filteredRoles.slice(start, start + itemsPerPage);
-  }, [filteredRoles, currentPage, itemsPerPage]);
+    return filteredDepartments.slice(start, start + itemsPerPage);
+  }, [filteredDepartments, currentPage, itemsPerPage]);
 
   // Handle Search Input
   const handleSearch = (e) => {
@@ -57,49 +57,49 @@ export default function Roles() {
   };
 
   // Actions
-  const handleAddRole = () => {
-    setEditingRole(null);
+  const handleAddDepartment = () => {
+    setEditingDepartment(null);
     setIsModalOpen(true);
   };
 
-  const handleEditRole = (role) => {
-    setEditingRole(role);
+  const handleEditDepartment = (department) => {
+    setEditingDepartment(department);
     setIsModalOpen(true);
   };
 
-  const handleDeleteRole = async (id) => {
-    if (window.confirm("Are you sure you want to delete this role?")) {
+  const handleDeleteDepartment = async (id) => {
+    if (window.confirm("Are you sure you want to delete this department?")) {
       try {
-        await roleService.deleteRole(id);
-        setRoles(roles.filter(r => r.id !== id));
+        await departmentService.deleteDepartment(id);
+        setDepartments(departments.filter(r => r.id !== id));
         if (currentItems.length === 1 && currentPage > 1) {
           setCurrentPage(currentPage - 1);
         }
       } catch (err) {
-        alert(err.message || 'Failed to delete role');
+        alert(err.message || 'Failed to delete department');
       }
     }
   };
 
-  const handleSaveRole = async (roleData) => {
+  const handleSaveDepartment = async (departmentData) => {
     setIsSaving(true);
     try {
-      if (editingRole) {
-        const updated = await roleService.updateRole(editingRole.id, {
-          code: roleData.code,
-          description: roleData.description
+      if (editingDepartment) {
+        const updated = await departmentService.updateDepartment(editingDepartment.id, {
+          code: departmentData.code,
+          description: departmentData.description
         });
-        setRoles(roles.map(r => r.id === updated.id ? updated : r));
+        setDepartments(departments.map(r => r.id === updated.id ? updated : r));
       } else {
-        const created = await roleService.createRole({
-          code: roleData.code,
-          description: roleData.description
+        const created = await departmentService.createDepartment({
+          code: departmentData.code,
+          description: departmentData.description
         });
-        setRoles([created, ...roles]);
+        setDepartments([created, ...departments]);
       }
       setIsModalOpen(false);
     } catch (err) {
-      alert(err.message || 'Failed to save role');
+      alert(err.message || 'Failed to save department');
     } finally {
       setIsSaving(false);
     }
@@ -117,12 +117,12 @@ export default function Roles() {
     <div className="page-container">
       <div className="page-header">
         <div>
-          <h1 className="page-title">Role Management</h1>
-          <p className="page-subtitle">Manage user roles and system access levels</p>
+          <h1 className="page-title">Department Management</h1>
+          <p className="page-subtitle">Manage user departments and system access levels</p>
         </div>
-        <button className="btn-primary" onClick={handleAddRole}>
+        <button className="btn-primary" onClick={handleAddDepartment}>
           <Plus size={20} />
-          <span>Add Role</span>
+          <span>Add Department</span>
         </button>
       </div>
 
@@ -149,7 +149,7 @@ export default function Roles() {
           <table className="premium-table">
             <thead>
               <tr>
-                <th width="30%">Role Code</th>
+                <th width="30%">Department Code</th>
                 <th width="50%">Description</th>
                 <th width="20%" className="text-right">Actions</th>
               </tr>
@@ -163,17 +163,17 @@ export default function Roles() {
                 transition={{ duration: 0.2 }}
               >
                 {currentItems.length > 0 ? (
-                  currentItems.map((role) => (
-                    <tr key={role.id}>
+                  currentItems.map((department) => (
+                    <tr key={department.id}>
                       <td>
-                        <span className="badge-code">{role.code}</span>
+                        <span className="badge-code">{department.code}</span>
                       </td>
-                      <td className="text-muted">{role.description}</td>
+                      <td className="text-muted">{department.description}</td>
                       <td className="actions-cell">
-                        <button className="action-btn edit" onClick={() => handleEditRole(role)} title="Edit Role">
+                        <button className="action-btn edit" onClick={() => handleEditDepartment(department)} title="Edit Department">
                           <Edit2 size={16} />
                         </button>
-                        <button className="action-btn delete" onClick={() => handleDeleteRole(role.id)} title="Delete Role">
+                        <button className="action-btn delete" onClick={() => handleDeleteDepartment(department.id)} title="Delete Department">
                           <Trash2 size={16} />
                         </button>
                       </td>
@@ -184,8 +184,8 @@ export default function Roles() {
                     <td colSpan="3" className="empty-state">
                       <div className="empty-state-content">
                         <Search size={40} className="empty-icon" />
-                        <h3>No roles found</h3>
-                        <p>We couldn't find any roles matching your search criteria.</p>
+                        <h3>No departments found</h3>
+                        <p>We couldn't find any departments matching your search criteria.</p>
                       </div>
                     </td>
                   </tr>
@@ -196,10 +196,10 @@ export default function Roles() {
         </div>
 
         {/* Pagination */}
-        {filteredRoles.length > 0 && (
+        {filteredDepartments.length > 0 && (
           <div className="pagination-wrapper">
             <div className="pagination-info">
-              Showing <strong>{((currentPage - 1) * itemsPerPage) + 1}</strong> to <strong>{Math.min(currentPage * itemsPerPage, filteredRoles.length)}</strong> of <strong>{filteredRoles.length}</strong> entries
+              Showing <strong>{((currentPage - 1) * itemsPerPage) + 1}</strong> to <strong>{Math.min(currentPage * itemsPerPage, filteredDepartments.length)}</strong> of <strong>{filteredDepartments.length}</strong> entries
             </div>
             <div className="pagination-controls">
               <button 
@@ -234,11 +234,11 @@ export default function Roles() {
         )}
       </div>
 
-      <RoleModal 
+      <DepartmentModal 
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSave={handleSaveRole}
-        initialData={editingRole}
+        onSave={handleSaveDepartment}
+        initialData={editingDepartment}
         isLoading={isSaving}
       />
       
