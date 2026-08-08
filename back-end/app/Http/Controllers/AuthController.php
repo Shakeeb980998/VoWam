@@ -30,6 +30,34 @@ class AuthController extends Controller
             // Load the tenant relationship
             $user->load('tenant');
 
+            $allowedKeys = [];
+            if ($user->tenant_id) {
+                // We are in the central connection currently, switch to tenant to fetch role navigations
+                $tenant = \App\Models\Tenant::find($user->tenant_id);
+                if ($tenant) {
+                    app(\App\Services\TenantManager::class)->switchToTenant($tenant);
+                    
+                    // Fetch the tenant user to get their role_id
+                    $tenantUser = \Illuminate\Support\Facades\DB::table('users')
+                        ->where('central_user_id', $user->id)
+                        ->first();
+
+                    if ($tenantUser && $tenantUser->role_id) {
+                        try {
+                            $allowedKeys = \Illuminate\Support\Facades\DB::table('role_navigations')
+                                ->where('role_id', $tenantUser->role_id)
+                                ->pluck('navigation_key')
+                                ->toArray();
+                        } catch (\Exception $e) {
+                            // Ignore if tenant DB is not connected during login
+                        }
+                    }
+                }
+            }
+
+            $navigation = config('navigation.navigation', []);
+            $filteredNavigation = \App\Http\Controllers\NavigationController::filterNavigation($navigation, $allowedKeys);
+
             return response()->json([
                 'message' => 'Login successful',
                 'token' => $token,
@@ -40,7 +68,7 @@ class AuthController extends Controller
                     'tenant_id' => $user->tenant_id,
                     'tenant_name' => $user->tenant ? $user->tenant->name : null,
                 ],
-                'navigation' => config('navigation.navigation', []),
+                'navigation' => $filteredNavigation,
                 'permissions' => config('navigation.permissions', [])
             ]);
         }

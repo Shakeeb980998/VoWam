@@ -44,6 +44,31 @@ export default function DashboardLayout() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isProfileDropdownOpen]);
 
+  // Fetch fresh navigation on refresh/mount
+  useEffect(() => {
+    const fetchNavigation = async () => {
+      try {
+        const response = await fetch(import.meta.env.VITE_API_BASE_URL + '/navigation', {
+          headers: {
+            'Authorization': `Bearer ${authService.getToken()}`,
+            'Accept': 'application/json'
+            // NOTE: If using X-Tenant-ID, we might need to send it.
+            // But we can check if it's stored in user object in localStorage if needed.
+            // Let's assume subdomain handles it or we send the token and it's resolved.
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setNavItems(data.navigation || []);
+          authService.setNavigation(data.navigation || []);
+        }
+      } catch (err) {
+        console.error('Failed to refresh navigation', err);
+      }
+    };
+    fetchNavigation();
+  }, []);
+
   const toggleSubMenu = (menuName) => {
     setExpandedMenus(prev => ({
       ...prev,

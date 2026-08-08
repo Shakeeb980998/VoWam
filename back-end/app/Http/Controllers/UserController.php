@@ -55,6 +55,8 @@ class UserController extends Controller
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'mobile_number' => ['required', 'string', 'max:20'],
+            
+            // Personal Details
             'gender' => ['nullable', 'string', 'in:male,female,other'],
             'date_of_birth' => ['nullable', 'date'],
             'address' => ['nullable', 'string'],
@@ -72,9 +74,11 @@ class UserController extends Controller
         try {
             DB::beginTransaction();
             
+            $tenantId = app(\App\Services\TenantManager::class)->getCurrentTenant()?->id;
+
             // Create in Central DB
             $centralUserId = DB::connection('mysql')->table('users')->insertGetId([
-                'tenant_id' => tenant('id') ?? null,
+                'tenant_id' => $tenantId,
                 'company_id' => $this->getTenantCompanyId(),
                 'name' => $validated['name'],
                 'email' => $validated['email'],
@@ -87,7 +91,7 @@ class UserController extends Controller
             // 1. Create User in Tenant DB
             $user = User::create([
                 'central_user_id' => $centralUserId, 
-                'tenant_id' => tenant('id') ?? null,
+                'tenant_id' => $tenantId,
                 'company_id' => $this->getTenantCompanyId(),
                 'role_id' => $validated['role_id'] ?? null,
                 'name' => $validated['name'],
@@ -193,10 +197,13 @@ class UserController extends Controller
 
             $user->update($userData);
 
+            $tenantId = app(\App\Services\TenantManager::class)->getCurrentTenant()?->id;
+
             // Sync to Central DB if valid ID, else create it
             if ($user->central_user_id > 0) {
                 DB::connection('mysql')->table('users')->where('id', $user->central_user_id)->update(array_merge(
                     [
+                        'tenant_id' => $tenantId, // Ensure tenant_id is synced correctly if it was NULL
                         'name' => $validated['name'],
                         'email' => $validated['email'],
                         'updated_at' => now(),
@@ -206,7 +213,7 @@ class UserController extends Controller
             } else {
                 // Retroactively create in central DB if it was missing
                 $centralUserId = DB::connection('mysql')->table('users')->insertGetId([
-                    'tenant_id' => tenant('id') ?? null,
+                    'tenant_id' => $tenantId,
                     'company_id' => $this->getTenantCompanyId(),
                     'name' => $validated['name'],
                     'email' => $validated['email'],

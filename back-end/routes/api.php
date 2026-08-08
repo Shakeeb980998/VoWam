@@ -23,13 +23,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user()->load('tenant');
     });
-    
-    // Dynamic Navigation Endpoint
-    Route::get('/navigation', [NavigationController::class, 'index']);
 });
 
 // Tenant-Aware Authenticated Routes
 Route::middleware(['auth:sanctum', 'tenant'])->group(function () {
+    // Dynamic Navigation Endpoint
+    Route::get('/navigation', [NavigationController::class, 'index']);
+
     // Users Management
     Route::get('users/form-dependencies', [UserController::class, 'formDependencies']);
     Route::apiResource('users', UserController::class);
